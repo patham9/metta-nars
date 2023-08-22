@@ -158,17 +158,13 @@
                      (if (> $t 1) (BoundBeliefEvents 0.0 0.1 (EventsMax) $t) nop)
                      (if (> $t 1) (BoundConcepts 0.0 0.1 (AttentionalFocusMax) $t) nop)))))
 (: EternalQuestion (-> Expression $t))
-(= (EternalQuestion $Term) (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief1 $BeliefEvent1 $CPrio1) $Belief1))
+(= (EternalQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $Belief)
+                                (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (eternal Nil 0.0))))))
 (: EventQuestion (-> Expression $t))
-(= (EventQuestion $Term) (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief1 $BeliefEvent1 $CPrio1) $BeliefEvent1))
+(= (EventQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $BeliefEvent)
+                                (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (0 Nil 0.0))))))
 
-;;goals
-(= (QueryFIFO Nil $QueryTerm) (Event (dummy (1.0 0.0)) (0 Nil 0.0)))
-(= (QueryFIFO (Cons $Event $Tail) $QueryTerm)
-   (let (Event ($Term $TV) $Metadata) $Event
-        (if (== $Term $QueryTerm)
-            $Event
-            (QueryFIFO $Tail $QueryTerm))))
+;;decision making and goals
 (= (OpExpectation Nil $t) 0.0)
 (= (OpExpectation (Decision ($Opname $DVOp) $Subgoal) $t) (Truth_Expectation $DVOp))
 
@@ -177,7 +173,7 @@
                                    (EternalQuestion (($Prec &/ (^ $Op)) =/> $Term)))
                                   ($DVPrecOp (Truth_Deduction $DV $ImpTV))
                                   ((Event ($PrecTerm $PrecTV) $PrecMetadata)
-                                   (Projection (QueryFIFO $FIFO $Prec) $t))
+                                   (Projection (EventQuestion $Prec) $t))
                                   ($DVOp (Truth_Deduction $PrecTV $DVPrecOp)))
                                  (Decision ((^ $Op) $DVOp) (Event ($Prec (Truth_StructuralDeduction $DVPrecOp))))))
         (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options (Decision (NoDecision (1.0 0.0)) subgoal) OpExpectation $t)
