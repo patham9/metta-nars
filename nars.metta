@@ -148,7 +148,7 @@
 (= (NegConfirmation $PrecTerm $ObservedCons $t)
    (let (Event (($PrecTerm =/> $PredictedCons) $ImpTV) $ImpMetadata) (EternalQuestion ($PrecTerm =/> $PredictedCons))
         (if (not (== $ObservedCons $PredictedCons))
-            (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.4)) ($t Nil 0.0)) $t)
+            (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t Nil 0.0)) $t)
             nop)))
 
 (= (Anticipate Nil $t) nop)
