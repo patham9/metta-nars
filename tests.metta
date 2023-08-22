@@ -30,8 +30,8 @@
 ;Please notice that it has revised it with the prior derived result, as you can also see in the evidence trail 1,2,3 being included
 ;[(Event (((({ garfield }) * ([ blue ])) --> like) (1.0 0.5692683291397822)) (eternal (Cons 7 (Cons 2 (Cons 1 (Cons 3 Nil)))) 0.0))]
 !(CollapseCardinality (get-atoms &belief_events))
-;[8]
+;[9]
 !(CollapseCardinality (get-atoms &attentional_focus))
-;[7]
+;[8]
 !(CollapseCardinality (get-atoms &concepts))
-;[95]
+;[100]

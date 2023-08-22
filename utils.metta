@@ -8,16 +8,16 @@
 (= (abs $x) (if (< $x 0) (- 0 $x) $x))
 (: sequential (-> Expression %Undefined%))
 (= (sequential $1) (superpose $1))
-(= (BuildTupleCounts $C $T) 
-   (superpose ((add-atom &self (= (TupleCount $T) $C))
-               (if (> $C 0) (BuildTupleCounts (- $C 1) (cdr-atom $T)) nop))))
+(= (TupleCount ()) 0)
+(= (TupleCount (1)) 1)
+(= (BuildTupleCounts $TOld $C $N) 
+   (let $T (collapse (superpose (1 (superpose $TOld))))
+        (superpose ((add-atom &self (= (TupleCount $T) (+ $C 2)))
+                    (if (< $C $N) (BuildTupleCounts $T (+ $C 1) $N) nop)))))
 (= (CountElement $x) 1)
-;;Build for count up to 100 (takes 2.5 sec but it is worth it if space or generally collapse counts are often needed)
-!(BuildTupleCounts 100
- (1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
+;;Build for count up to 100 (takes a few sec but it is worth it if space or generally collapse counts are often needed)
+!(BuildTupleCounts (1) 0 100)
 (: CollapseCardinality (-> Expression Number))
 (= (CollapseCardinality $expression) (TupleCount (collapse (CountElement $expression))))
+
+

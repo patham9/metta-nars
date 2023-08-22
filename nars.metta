@@ -96,7 +96,7 @@
    (sequential ((let* (($Ev (get-atoms &belief_events))
                        ((Event $Sentence ($Time $Evidence $EPrio)) $Ev))
                       (if (< (EventPriorityNow $EPrio $t) $Threshold) (remove-atom &belief_events $Ev) nop))
-                (let $CurrentAmount (TupleCount (collapse (CountElement (get-atoms &belief_events))))
+                (let $CurrentAmount (CollapseCardinality (get-atoms &belief_events))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
                          (BoundBeliefEvents (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
 
@@ -105,7 +105,7 @@
                        ((Concept $Term (Event $Sentence $Metadata) $BeliefEvent $CPrio) $C))
                       (if (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
                                                                                      (add-atom &concepts $C))) nop))
-                (let $CurrentAmount (TupleCount (collapse (CountElement (get-atoms &attentional_focus))))
+                (let $CurrentAmount (CollapseCardinality (get-atoms &attentional_focus))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
                          (BoundConcepts (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
 
@@ -161,3 +161,33 @@
 (= (EternalQuestion $Term) (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief1 $BeliefEvent1 $CPrio1) $Belief1))
 (: EventQuestion (-> Expression $t))
 (= (EventQuestion $Term) (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief1 $BeliefEvent1 $CPrio1) $BeliefEvent1))
+
+;;goals
+(= (QueryFIFO Nil $QueryTerm) (Event (dummy (1.0 0.0)) (0 Nil 0.0)))
+(= (QueryFIFO (Cons $Event $Tail) $QueryTerm)
+   (let (Event ($Term $TV) $Metadata) $Event
+        (if (== $Term $QueryTerm)
+            $Event
+            (QueryFIFO $Tail $QueryTerm))))
+(= (OpExpectation Nil $t) 0.0)
+(= (OpExpectation (Decision ($Opname $DVOp) $Subgoal) $t) (Truth_Expectation $DVOp))
+
+(= (BestDecision $t (Event ($Term $DV) $GoalMetadata) $FIFO)
+   (let $Options (collapse (let* (((Event ((($Prec &/ (^ $Op)) =/> $Term) $ImpTV) $ImpMetadata)
+                                   (EternalQuestion (($Prec &/ (^ $Op)) =/> $Term)))
+                                  ($DVPrecOp (Truth_Deduction $DV $ImpTV))
+                                  ((Event ($PrecTerm $PrecTV) $PrecMetadata)
+                                   (Projection (QueryFIFO $FIFO $Prec) $t))
+                                  ($DVOp (Truth_Deduction $PrecTV $DVPrecOp)))
+                                 (Decision ((^ $Op) $DVOp) (Event ($Prec (Truth_StructuralDeduction $DVPrecOp))))))
+        (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options (Decision (NoDecision (1.0 0.0)) subgoal) OpExpectation $t)
+             (if (> (Truth_Expectation $DVOp) 0.5)
+                 (Execute $Opname)
+                 (DeriveSubgoals (Event ($Term $DV) $GoalMetadata) $Options)))))
+
+(= (AddGoalEvent $Sentence)
+   (let* ((($t $evidentialBase) (GetReasonerState))
+          ($InputEvent (Event $Sentence ($t $evidentialBase ($t 1.0)))))
+         (sequential ((BestDecision $t $InputEvent (get-state &FIFO))
+                      (UpdateReasonerState)))))
+
