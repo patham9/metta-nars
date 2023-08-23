@@ -30,7 +30,7 @@
                             (($MatchConcept (sequential ((remove-atom &attentional_focus $MatchConcept)
                                                          (let* (($RevisedBelief (RevisionAndChoice $Belief $NewEventEternalized))
                                                                 ($MaxPrio (if (> (EventPriorityNow $EPrio $t) (ConceptPriorityNow $CPrio $t))
-                                                                                 $EPrio $CPrio)))
+                                                                              $EPrio $CPrio)))
                                                          (add-atom &attentional_focus (Concept $Term $RevisedBelief $NewEvent $MaxPrio))))))
                              (%void% (case (match &concepts $MatchConcept $MatchConcept)
                                            (($MatchConcept (sequential ((remove-atom &concepts $MatchConcept)
