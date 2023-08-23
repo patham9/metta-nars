@@ -1,11 +1,13 @@
 # metta-nars
 ONA-style NARS implementation in MeTTa
 
-**The structure**
+**The structure (as in ONA)**
+
+![ONA v0.9.x overview diagram](https://user-images.githubusercontent.com/8284677/181041442-f497e4b6-5abe-43ac-8ba7-e75152a6b51f.png)
 
 The reasoning system consists of
 - [Logic]: Non-Axiomatic Logic
-- [Memory]: Spaces for belief&goal events, and concept space
+- [Memory]: Spaces for belief&goal events, and concepts
 - [Control]:
     - Declarative (deriving events and knowledge from events)
     - Temporal (sequence and implication formation)
