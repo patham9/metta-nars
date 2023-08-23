@@ -22,9 +22,9 @@
       $bestCandidate
       (let* (($head (car-atom $tuple))
              ($tail (cdr-atom $tuple)))
-        (if (> ($evaluateCandidateFunction $head $t) ($evaluateCandidateFunction $bestCandidate $t))
-            (BestCandidate $tail $head $evaluateCandidateFunction $t)
-            (BestCandidate $tail $bestCandidate $evaluateCandidateFunction $t)))))
+            (if (> ($evaluateCandidateFunction $head $t) ($evaluateCandidateFunction $bestCandidate $t))
+                (BestCandidate $tail $head $evaluateCandidateFunction $t)
+                (BestCandidate $tail $bestCandidate $evaluateCandidateFunction $t)))))
 
 ;functions to select highest-priority events in belief and goal PQ
 (= (PriorityOf Nil $t)  0.0)
