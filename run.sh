@@ -1,5 +1,5 @@
 cd src
-sh glue.sh
+sh build.sh
 cd ..
 cat ./src/NARS.metta ./tests/tests0.metta > RUN.metta && metta RUN.metta > OUTPUT_tests0.txt
 cat ./src/NARS.metta ./tests/tests1.metta > RUN.metta && metta RUN.metta > OUTPUT_tests1.txt
