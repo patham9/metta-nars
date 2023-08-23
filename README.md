@@ -1,7 +1,7 @@
 # metta-nars
 ONA-style NARS implementation in MeTTa
 
-**The structure (as in ONA)**
+**The structure**
 
 The reasoning system consists of
 - [Logic]: Non-Axiomatic Logic
