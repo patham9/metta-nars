@@ -22,7 +22,8 @@
       $bestCandidate
       (let* (($head (car-atom $tuple))
              ($tail (cdr-atom $tuple)))
-            (if (> ($evaluateCandidateFunction $head $t) ($evaluateCandidateFunction $bestCandidate $t))
+            (if (> ($evaluateCandidateFunction $head $t)
+                   ($evaluateCandidateFunction $bestCandidate $t))
                 (BestCandidate $tail $head $evaluateCandidateFunction $t)
                 (BestCandidate $tail $bestCandidate $evaluateCandidateFunction $t)))))
 
@@ -41,7 +42,8 @@
 (= (BoundEvents $collection $Threshold $Increment $TargetAmount $t)
    (sequential ((let* (($Ev (get-atoms $collection))
                        ((Event $Sentence ($Time $Evidence $EPrio)) $Ev))
-                      (if (< (EventPriorityNow $EPrio $t) $Threshold) (remove-atom $collection $Ev) nop))
+                      (if (< (EventPriorityNow $EPrio $t) $Threshold)
+                          (remove-atom $collection $Ev) nop))
                 (let $CurrentAmount (CollapseCardinality (get-atoms $collection))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
                          (BoundEvents $collection (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))

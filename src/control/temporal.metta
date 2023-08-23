@@ -49,20 +49,17 @@
 (= (TemporalImplicationInduction (Cons $Cons (Cons $Op (Cons $Prec $Tail))))
    (if (and (IsOp $Op) (and (not (IsOp $Cons)) (not (IsOp $Prec))))
        (let $PrecOp (TemporalSequence $Prec $Op)
-            (TemporalImplication $PrecOp $Cons))
-       nop))
+            (TemporalImplication $PrecOp $Cons)) nop))
 ;and temporal without operation
 (= (TemporalImplicationInduction (Cons $Cons (Cons $Prec $Tail)))
    (if (and (not (IsOp $Prec)) (not (IsOp $Cons)))
-       (TemporalImplication $Prec $Cons)
-       nop))
+       (TemporalImplication $Prec $Cons) nop))
 
 ;Add negative evidence for implications which predicted the input unsuccessfully
 (= (NegConfirmation $PrecTerm $ObservedCons $t)
    (let (Event (($PrecTerm =/> $PredictedCons) $ImpTV) $ImpMetadata) (EternalQuestion ($PrecTerm =/> $PredictedCons))
         (if (not (== $ObservedCons $PredictedCons))
-            (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t Nil 0.0)) $t)
-            nop)))
+            (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t Nil 0.0)) $t) nop)))
 
 ;Check if the implication's preconditions are met to anticipate the by the implication predicted outcome
 (= (Anticipate Nil $t) nop)
@@ -71,16 +68,14 @@
    (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
           ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
          (if (not (IsOp $Pre))
-             (NegConfirmation $PreTerm $PosTerm $t)
-             nop)))
+             (NegConfirmation $PreTerm $PosTerm $t) nop)))
 (= (Anticipate (Cons $Pos (Cons $Op (Cons $Pre $Trail))) $t)
    (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
           ((Event ($OpTerm $OpTV) $OpMetadata) $Op)
           ((Event ($PosTerm $PosTV) $PosMetadata) $Pos)
           ($Sequence ($Pre &/ Pos)))
          (if (and (IsOp $Op) (not (IsOp $Pre)))
-             (NegConfirmation ($PreTerm &/ $OpTerm) $PosTerm $t)
-             nop)))
+             (NegConfirmation ($PreTerm &/ $OpTerm) $PosTerm $t) nop)))
 
 ;;Input procedure
 (= (AddBeliefEvent $Sentence)
