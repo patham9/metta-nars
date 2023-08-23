@@ -11,7 +11,7 @@ The reasoning system consists of
     - Temporal (sequence and implication formation)
     - Procedural (decision making with subgoaling)
  
-On a high level, this implementation follows the same structure as ONA:
+In terms of inference control flow, this implementation follows the same structure as ONA:
 
 ![ONA v0.9.x overview diagram](https://user-images.githubusercontent.com/8284677/181041442-f497e4b6-5abe-43ac-8ba7-e75152a6b51f.png)
 
