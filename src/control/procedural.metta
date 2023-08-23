@@ -1,17 +1,26 @@
-;;decision making and goals
+;;Procedural inference (decision making with operation execution and subgoaling)
+
+;the last operation execution the system has performed
+!(bind! &execution (new-state None))
+
+;Derived goal event priority
+(= (SubgoalPriority $EPrio $ConcTV) (* $EPrio (Truth_Expectation $ConcTV)))
+
+;Expectation of an operation is the truth expectation of its desire value
 (= (OpExpectation Nil $t) 0.0)
 (= (OpExpectation (Decision ($Opname $DVOp) $Subgoal) $t) (Truth_Expectation $DVOp))
 
+;Execute an operation, also injecting it as an event
 (= (Execute $Opname)
     (sequential ((change-state! &execution $Opname)
                  (AddBeliefEvent ($Opname (1.0 0.9))))))
 
+;Add subgoals to the PQ
 (= (DeriveSubgoals $Options)
    (let (Decision $Op $Subgoal) (superpose $Options)
         (add-atom &goal_events $Subgoal)))
 
-(= (SubgoalPriority $EPrio $ConcTV) (* $EPrio (Truth_Expectation $ConcTV)))
-
+;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals
 (= (BestDecision $t (Event ($Term $DV) ($GoalTime $GoalEvBase $GoalPrio)) $FIFO)
    (let $Options (collapse (let* (((Event ((($Prec &/ (^ $Op)) =/> $Term) $ImpTV) ($ImpTime $ImpEvBase $ImpPrio))
                                    (EternalQuestion (($Prec &/ (^ $Op)) =/> $Term)))
@@ -35,7 +44,7 @@
                                     (sequential ((remove-atom &goal_events $Ev)
                                                  (BestDecision $t $Ev (get-state &FIFO)))))
                                (UpdateReasonerState)
-                               (if (> $t 1) (BoundEvents &goal_events 0.0 0.1 (EventsMax) $t) nop))))
+                               (if (> $t 1) (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t) nop))))
 
 ;;Input procedure
 (= (AddGoalEvent $Sentence)

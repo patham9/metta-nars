@@ -1,22 +1,18 @@
-(= (AttentionalFocusMax) 10)
-(= (EventsMax) 10)
-!(bind! &currentTime (new-state 1))
-!(bind! &evidentialBase (new-state 1))
-;;Reasoner state and memory
-!(bind! &execution (new-state None))
-(= (increment $atom) (change-state! $atom (+ 1 (get-state $atom))))
-(= (UpdateReasonerState) ((increment &currentTime) (increment &evidentialBase)))
-(= (GetReasonerState) ((get-state &currentTime) (Cons (get-state &evidentialBase) Nil)))
-!(bind! &belief_events (new-space))
-!(bind! &goal_events (new-space))
-!(bind! &attentional_focus (new-space))
-!(bind! &concepts (new-space))
+;params
+(= (AttentionalFocusConceptsMax) 10)
 
-(= (EventPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
+;spaces
+!(bind! &concepts (new-space))
+!(bind! &attentional_focus (new-space))
+
+;priority of concepts
 (= (ConceptPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
+
+;whether evidence was counted twice
 (= (StampOverlap Nil) False)
 (= (StampOverlap (Cons $LH $LT)) (or (Included $LH $LT) (StampOverlap $LT)))
-                                    
+               
+;revise if there is no evidential overlap, else use higher-confident candidate
 (= (RevisionAndChoice (Event ($Term1 ($f1 $c1)) (eternal $ev1 $EPrio1)) (Event ($Term2 ($f2 $c2)) (eternal $ev2 $EPrio2)))
    (let $ConclusionStamp (ListConcat $ev1 $ev2) 
     (if (StampOverlap $ConclusionStamp) 
@@ -25,7 +21,7 @@
             (Event ($Term2 ($f2 $c2)) (eternal $ev2 0.0)))
         (Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) (eternal $ConclusionStamp 0.0)))))
 
-;;revise existing one or create new concept
+;;update beliefs in existing concept with the new event or create new concept to enter the new evidence
 (= (UpdateConcept $NewEvent $t)
     (let* (((Event ($Term $TV) ($Time $Evidence $EPrio)) $NewEvent)
            ($NewEventEternalized (Eternalize $NewEvent))
@@ -42,31 +38,22 @@
                                                               (UpdateConcept $NewEvent $t))))
                                   (%void% (add-atom &attentional_focus (Concept $Term $NewEventEternalized $NewEvent $EPrio))))))))))))
 
-(= (ProcessEvent $Ev $t)
-   (sequential ((add-atom &belief_events $Ev)
-                (UpdateConcept $Ev $t))))
-
-(= (BoundEvents $collection $Threshold $Increment $TargetAmount $t)
-   (sequential ((let* (($Ev (get-atoms $collection))
-                       ((Event $Sentence ($Time $Evidence $EPrio)) $Ev))
-                      (if (< (EventPriorityNow $EPrio $t) $Threshold) (remove-atom $collection $Ev) nop))
-                (let $CurrentAmount (CollapseCardinality (get-atoms $collection))
-                     (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
-                         (BoundEvents $collection (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
-
-(= (BoundConcepts $Threshold $Increment $TargetAmount $t)
+;bound the size of attentional focus of concepts
+(= (BoundAttention $Threshold $Increment $TargetAmount $t)
    (sequential ((let* (($C (get-atoms &attentional_focus))
                        ((Concept $Term (Event $Sentence $Metadata) $BeliefEvent $CPrio) $C))
                       (if (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
                                                                                      (add-atom &concepts $C))) nop))
                 (let $CurrentAmount (CollapseCardinality (get-atoms &attentional_focus))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
-                         (BoundConcepts (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
+                         (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
 
+;get eternal belief of concept
 (: EternalQuestion (-> Expression $t))
 (= (EternalQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $Belief)
                                 (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (eternal Nil 0.0))))))
+
+;get event belief of concept
 (: EventQuestion (-> Expression $t))
 (= (EventQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $BeliefEvent)
                                 (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (0 Nil 0.0))))))
-
