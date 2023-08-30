@@ -44,7 +44,7 @@
                        ((Concept $Term (Event $Sentence $Metadata) $BeliefEvent $CPrio) $C))
                       (if (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
                                                                                      (add-atom &concepts $C))) nop))
-                (let $CurrentAmount (CollapseCardinality (get-atoms &attentional_focus))
+                (let $CurrentAmount (TupleCount (collapse (get-atoms &attentional_focus)))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
                          (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
 

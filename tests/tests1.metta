@@ -28,9 +28,9 @@
 ;Please notice that it has revised it with the prior derived result, as you can also see in the evidence trail 1,2,3 being included
 
 ;debug:
-!(CollapseCardinality (get-atoms &belief_events))
+!(TupleCount (collapse (get-atoms &belief_events)))
 ;[8]
-!(CollapseCardinality (get-atoms &attentional_focus))
+!(TupleCount (collapse (get-atoms &attentional_focus)))
 ;[8]
-!(CollapseCardinality (get-atoms &concepts))
+!(TupleCount (collapse (get-atoms &concepts)))
 ;[100]
