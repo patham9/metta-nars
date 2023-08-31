@@ -8,18 +8,27 @@
 ;priority of concepts
 (= (ConceptPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
 
-;whether evidence was counted twice
-(= (StampOverlap Nil) False)
-(= (StampOverlap (Cons $LH $LT)) (or (Included $LH $LT) (StampOverlap $LT)))
+;whether evidence was just counted once
+!(bind! &tempstate (new-state False))
+!(bind! &tempset (new-space))
+(= (StampDisjoint $x)
+   (not (superpose ((case (change-state! &tempstate False) ())
+               (case (get-atoms &tempset)
+                     (($y (remove-atom &tempset $y))))
+               (case (let $z (superpose $x)
+                          (case (match &tempset $z $z)
+                                       (($w (change-state! &tempstate True))
+                                        (%void% (add-atom &tempset $z))))) ())
+               (get-state &tempstate)))))
                
 ;revise if there is no evidential overlap, else use higher-confident candidate
 (= (RevisionAndChoice (Event ($Term1 ($f1 $c1)) (eternal $ev1 $EPrio1)) (Event ($Term2 ($f2 $c2)) (eternal $ev2 $EPrio2)))
-   (let $ConclusionStamp (ListConcat $ev1 $ev2) 
-    (if (StampOverlap $ConclusionStamp) 
+   (let $ConclusionStamp (TupleConcat $ev1 $ev2)
+    (if (StampDisjoint $ConclusionStamp)
+        (Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) (eternal $ConclusionStamp (0 0.0)))
         (if (> $c1 $c2)
-            (Event ($Term1 ($f1 $c1)) (eternal $ev1 0.0))
-            (Event ($Term2 ($f2 $c2)) (eternal $ev2 0.0)))
-        (Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) (eternal $ConclusionStamp 0.0)))))
+            (Event ($Term1 ($f1 $c1)) (eternal $ev1 (0 0.0)))
+            (Event ($Term2 ($f2 $c2)) (eternal $ev2 (0 0.0)))))))
 
 ;;update beliefs in existing concept with the new event or create new concept to enter the new evidence
 (= (UpdateConcept $NewEvent $t)
@@ -40,10 +49,10 @@
 
 ;bound the size of attentional focus of concepts
 (= (BoundAttention $Threshold $Increment $TargetAmount $t)
-   (sequential ((let* (($C (get-atoms &attentional_focus))
+   (sequential ((case (let* (($C (get-atoms &attentional_focus))
                        ((Concept $Term (Event $Sentence $Metadata) $BeliefEvent $CPrio) $C))
                       (if (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
-                                                                                     (add-atom &concepts $C))) nop))
+                                                                                     (add-atom &concepts $C))) nop)) ())
                 (let $CurrentAmount (CollapseCardinality (get-atoms &attentional_focus))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
                          (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))

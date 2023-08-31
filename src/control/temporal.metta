@@ -3,7 +3,7 @@
 ;use the event's evidence to induce a time-independent belief which can be used in the future
 (= (Eternalize $Ev) (let (Event ($Term $TV) ($Time $Evidence $EPrio)) $Ev
                          (if (== $Time eternal) $Ev
-                         (Event ($Term (Truth_Eternalize $TV)) (eternal $Evidence $EPrio)))))
+                         (Event ($Term (Truth_Eternalize $TV)) (eternal $Evidence (0 0.0))))))
 
 ;use evidence of an event at a slightly different moment in time
 (= (Projection (Event ($Term ($f $c)) ($Time $Evidence $EPrio)) $TargetTime)
@@ -30,12 +30,12 @@
 ;Form a sequence of two events
 (= (TemporalSequence $Ev1 (Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))
    (let (Event ($Term1 $Truth1) ($Time1 $Evidence1 $EPrio1)) (Projection $Ev1 $Time2)
-        (Event (($Term1 &/ $Term2) (Truth_Intersection $Truth1 $Truth2)) ($Time2 (ListConcat $Evidence1 $Evidence2) (0 0.0)))))
+        (Event (($Term1 &/ $Term2) (Truth_Intersection $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0)))))
 
 ;Form a temporal implication between two events
 (= (TemporalImplication $Ev1 (Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))
    (let (Event ($Term1 $Truth1) ($Time1 $Evidence1 $EPrio1)) (Projection $Ev1 $Time2)
-        (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (ListConcat $Evidence1 $Evidence2) (0 0.0)))))
+        (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0)))))
 
 ;Whether an event's term is an operation
 (= (IsOp (Event ($Term $Truth) $Metadata))
@@ -59,7 +59,7 @@
 (= (NegConfirmation $PrecTerm $ObservedCons $t)
    (let (Event (($PrecTerm =/> $PredictedCons) $ImpTV) $ImpMetadata) (EternalQuestion ($PrecTerm =/> $PredictedCons))
         (if (not (== $ObservedCons $PredictedCons))
-            (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t Nil 0.0)) $t) nop)))
+            (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t () (0 0.0))) $t) nop)))
 
 ;Check if the implication's preconditions are met to anticipate the by the implication predicted outcome
 (= (Anticipate Nil $t) nop)

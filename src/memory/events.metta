@@ -11,7 +11,7 @@
 !(bind! &evidentialBase (new-state 1))
 (= (increment $atom) (change-state! $atom (+ 1 (get-state $atom))))
 (= (UpdateReasonerState) ((increment &currentTime) (increment &evidentialBase)))
-(= (GetReasonerState) ((get-state &currentTime) (Cons (get-state &evidentialBase) Nil)))
+(= (GetReasonerState) ((get-state &currentTime) ((get-state &evidentialBase))))
 
 ;priority of events
 (= (EventPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
@@ -40,10 +40,10 @@
 
 ;bound the size of the attentional focus for tasks / events
 (= (BoundEvents $collection $Threshold $Increment $TargetAmount $t)
-   (sequential ((let* (($Ev (get-atoms $collection))
+   (sequential ((case (let* (($Ev (get-atoms $collection))
                        ((Event $Sentence ($Time $Evidence $EPrio)) $Ev))
                       (if (< (EventPriorityNow $EPrio $t) $Threshold)
-                          (remove-atom $collection $Ev) nop))
+                          (remove-atom $collection $Ev) nop)) ())
                 (let $CurrentAmount (CollapseCardinality (get-atoms $collection))
                      (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
                          (BoundEvents $collection (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
