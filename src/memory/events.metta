@@ -17,11 +17,11 @@
 (= (EventPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
 
 ;retrieve the best candidate (allows to use tuples / collapse results / spaces as a PQ)
-!(bind! &tempbest (new-state nix))
+!(bind! &tempbest (new-state Nil))
 !(bind! &tempbestscore (new-state 0))
 (= (BestCandidate $tuple $evaluateCandidateFunction $t)
    (sequential ((case (change-state! &tempbestscore 0) ())
-                (case (change-state! &tempbest nix) ())
+                (case (change-state! &tempbest Nil) ())
                 (case (let* (($x (superpose $tuple))
                              ($fx ($evaluateCandidateFunction $x $t)))
                             (superpose ((if (> $fx (get-state &tempbestscore))
