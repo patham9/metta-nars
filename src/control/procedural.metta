@@ -38,16 +38,16 @@
                  (DeriveSubgoals $Options)))))
 
 ;;select the highest priority goal event from the PQ and use it for decision making
-(= (GoalCycle $t) (sequential ((let $Ev (SelectHighestPriorityEvent &goal_events $t)
-                                    (sequential ((remove-atom &goal_events $Ev)
-                                                 (BestDecision $t $Ev (get-state &FIFO)))))
-                               (UpdateReasonerState)
-                               (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t))))
+(= (GoalCycle $t) (do (sequential ((let $Ev (SelectHighestPriorityEvent &goal_events $t)
+                                        (sequential ((remove-atom &goal_events $Ev)
+                                                     (BestDecision $t $Ev (get-state &FIFO)))))
+                                   (UpdateReasonerState)
+                                   (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t)))))
 
 ;;Input procedure
 (= (AddGoalEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
           ($InputEvent (Event $Sentence ($t $evidentialBase ($t 1.0)))))
-         (sequential ((change-state! &execution None)
-                      (add-atom &goal_events $InputEvent)
-                      (GoalCycle $t)))))
+         (do (sequential ((change-state! &execution None)
+                          (add-atom &goal_events $InputEvent)
+                          (GoalCycle $t))))))
