@@ -17,21 +17,23 @@
 (= (EventPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
 
 ;retrieve the best candidate (allows to use tuples / collapse results / spaces as a PQ)
-(= (BestCandidate $tuple $bestCandidate $evaluateCandidateFunction $t)
-  (if (== $tuple ()) 
-      $bestCandidate
-      (let* (($head (car-atom $tuple))
-             ($tail (cdr-atom $tuple)))
-            (if (> ($evaluateCandidateFunction $head $t)
-                   ($evaluateCandidateFunction $bestCandidate $t))
-                (BestCandidate $tail $head $evaluateCandidateFunction $t)
-                (BestCandidate $tail $bestCandidate $evaluateCandidateFunction $t)))))
+!(bind! &tempbest (new-state nix))
+!(bind! &tempbestscore (new-state 0))
+(= (BestCandidate $tuple $evaluateCandidateFunction $t)
+   (sequential ((case (change-state! &tempbestscore 0) ())
+                (case (change-state! &tempbest nix) ())
+                (case (let* (($x (superpose $tuple))
+                             ($fx ($evaluateCandidateFunction $x $t)))
+                            (superpose ((if (> $fx (get-state &tempbestscore))
+                                            (sequential ((change-state! &tempbest $x)
+                                                         (change-state! &tempbestscore $fx))) nop)))) ())
+               (get-state &tempbest))))
 
 ;functions to select highest-priority events in belief and goal PQ
 (= (PriorityOf Nil $t)  0.0)
 (= (PriorityOf (Event $Sentence ($occT $Ev $Prio)) $t) (EventPriorityNow $Prio $t))
-(= (SelectHighestPriorityEvent $collection $baseCandidate $t)
-   (let $Evs (collapse (match $collection $1 $1)) (BestCandidate $Evs $baseCandidate PriorityOf $t)))
+(= (SelectHighestPriorityEvent $collection $t)
+   (let $Evs (collapse (match $collection $1 $1)) (BestCandidate $Evs PriorityOf $t)))
 
 ;a belief event to process, which demands adding it to the PQ and updating its concept
 (= (ProcessBeliefEvent $Ev $t)

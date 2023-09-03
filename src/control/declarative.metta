@@ -6,7 +6,7 @@
 ;making declarative inferences on two events (task from PQ and belief from concept)
 (= (Conclude (Event $S1 ($time1 $ev1 $prio1)) (Event $S2 ($time2 $ev2 $prio2)) $CPrio $t)
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-        (if (and (not (== $S1 $S2)) (StampDisjoint $ConclusionStamp))
+        (if (StampDisjoint $ConclusionStamp)
             (let ($ConcTerm $ConcTV) (superpose ((|- $S1 $S2) (|- $S2 $S1)))
                  (conclusion (Event ($ConcTerm $ConcTV) 
                                     ($time1 $ConclusionStamp
@@ -24,7 +24,7 @@
               (((conclusion $1) (ProcessBeliefEvent $1 $t))))))
 
 ;select the highest priority belief event from the PQ and use it for reasoning
-(= (BeliefCycle $t) (sequential ((let $Ev (SelectHighestPriorityEvent &belief_events Nil $t)
+(= (BeliefCycle $t) (sequential ((let $Ev (SelectHighestPriorityEvent &belief_events $t)
                                       (sequential ((remove-atom &belief_events $Ev)
                                       (ReasonWithTask $Ev $t))))
                                  (UpdateReasonerState)
