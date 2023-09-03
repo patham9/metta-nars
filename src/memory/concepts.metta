@@ -24,9 +24,9 @@
 ;revise if there is no evidential overlap, else use higher-confident candidate
 (= (RevisionAndChoice (Event ($Term1 ($f1 $c1)) (eternal $ev1 $EPrio1)) (Event ($Term2 ($f2 $c2)) (eternal $ev2 $EPrio2)))
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-    (if (StampDisjoint $ConclusionStamp)
+    (If (StampDisjoint $ConclusionStamp)
         (Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) (eternal $ConclusionStamp (0 0.0)))
-        (if (> $c1 $c2)
+        (If (> $c1 $c2)
             (Event ($Term1 ($f1 $c1)) (eternal $ev1 (0 0.0)))
             (Event ($Term2 ($f2 $c2)) (eternal $ev2 (0 0.0)))))))
 
@@ -38,7 +38,7 @@
          (sequential ((case (match &attentional_focus $MatchConcept $MatchConcept)
                             (($MatchConcept (sequential ((remove-atom &attentional_focus $MatchConcept)
                                                          (let* (($RevisedBelief (RevisionAndChoice $Belief $NewEventEternalized))
-                                                                ($MaxPrio (if (> (EventPriorityNow $EPrio $t) (ConceptPriorityNow $CPrio $t))
+                                                                ($MaxPrio (If (> (EventPriorityNow $EPrio $t) (ConceptPriorityNow $CPrio $t))
                                                                               $EPrio $CPrio)))
                                                          (add-atom &attentional_focus (Concept $Term $RevisedBelief $NewEvent $MaxPrio))))))
                              (%void% (case (match &concepts $MatchConcept $MatchConcept)
@@ -51,11 +51,11 @@
 (= (BoundAttention $Threshold $Increment $TargetAmount $t)
    (sequential ((do (let* (($C (get-atoms &attentional_focus))
                            ((Concept $Term (Event $Sentence $Metadata) $BeliefEvent $CPrio) $C))
-                          (if (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
-                                                                                         (add-atom &concepts $C))) nop)))
+                          (If (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
+                                                                                         (add-atom &concepts $C))))))
                 (let $CurrentAmount (CollapseCardinality (get-atoms &attentional_focus))
-                     (if (> $CurrentAmount $TargetAmount)
-                         (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
+                     (If (> $CurrentAmount $TargetAmount)
+                         (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t))))))
 
 ;get eternal belief of concept
 (: EternalQuestion (-> Expression $t))

@@ -6,18 +6,18 @@
 ;making declarative inferences on two events (task from PQ and belief from concept)
 (= (Conclude (Event $S1 ($time1 $ev1 $prio1)) (Event $S2 ($time2 $ev2 $prio2)) $CPrio $t)
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-        (if (StampDisjoint $ConclusionStamp)
+        (If (StampDisjoint $ConclusionStamp)
             (let ($ConcTerm $ConcTV) (superpose ((|- $S1 $S2) (|- $S2 $S1)))
                  (conclusion (Event ($ConcTerm $ConcTV) 
                                     ($time1 $ConclusionStamp
                                             ($t (ConclusionPriority (EventPriorityNow $prio1 $t)
-                                            (ConceptPriorityNow $CPrio $t) $ConcTV)))))) nop)))
+                                            (ConceptPriorityNow $CPrio $t) $ConcTV)))))))))
 
 ;find a belief for the task to generate conclusions with
 (= (ReasonWithTask (Event $S1 ($time1 $ev1 $prio1)) $t) 
    (let ($Belief $CPrio) (case (get-atoms &attentional_focus)
                                (((Concept $Term (Event $SE2 ($timeE2 $evE2 $prioE2)) (Event $S2 ($time2 $ev2 $prio2)) $CPrio)
-                                 (if (and (not (== $time1 eternal)) (> (abs (- $time1 $time2)) 20))
+                                 (If (and (not (== $time1 eternal)) (> (abs (- $time1 $time2)) 20))
                                      ((Event $SE2 ($timeE2 $evE2 $prioE2)) $Cprio)
                                      ((Event $S2 ($time2 $ev2 $prio2)) $CPrio)))))
         (case (Conclude (Event $S1 ($time1 $ev1 $prio1)) (TemporallyAlignedBelief $time1 $Belief) $CPrio $t)
