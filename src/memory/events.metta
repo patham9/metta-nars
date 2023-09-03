@@ -30,7 +30,6 @@
                (get-state &tempbest))))
 
 ;functions to select highest-priority events in belief and goal PQ
-(= (PriorityOf Nil $t)  0.0)
 (= (PriorityOf (Event $Sentence ($occT $Ev $Prio)) $t) (EventPriorityNow $Prio $t))
 (= (SelectHighestPriorityEvent $collection $t)
    (let $Evs (collapse (match $collection $1 $1)) (BestCandidate $Evs PriorityOf $t)))
@@ -47,5 +46,5 @@
                       (if (< (EventPriorityNow $EPrio $t) $Threshold)
                           (remove-atom $collection $Ev) nop)) ())
                 (let $CurrentAmount (CollapseCardinality (get-atoms $collection))
-                     (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
+                     (if (> $CurrentAmount $TargetAmount)
                          (BoundEvents $collection (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))

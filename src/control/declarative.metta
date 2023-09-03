@@ -28,5 +28,5 @@
                                       (sequential ((remove-atom &belief_events $Ev)
                                       (ReasonWithTask $Ev $t))))
                                  (UpdateReasonerState)
-                                 (if (> $t 1) (BoundEvents &belief_events 0.0 0.1 (BeliefEventsMax) $t) nop)
-                                 (if (> $t 1) (BoundAttention 0.0 0.1 (AttentionalFocusConceptsMax) $t) nop))))
+                                 (BoundEvents &belief_events 0.0 0.1 (BeliefEventsMax) $t)
+                                 (BoundAttention 0.0 0.1 (AttentionalFocusConceptsMax) $t))))

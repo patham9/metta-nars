@@ -7,7 +7,6 @@
 (= (SubgoalPriority $EPrio $ConcTV) (* $EPrio (Truth_Expectation $ConcTV)))
 
 ;Expectation of an operation is the truth expectation of its desire value
-(= (OpExpectation Nil $t) 0.0)
 (= (OpExpectation (Decision ($Opname $DVOp) $Subgoal) $t) (Truth_Expectation $DVOp))
 
 ;Execute an operation, also injecting it as an event
@@ -32,9 +31,8 @@
                                   ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase)))
                                  (if (StampDisjoint $SubgoalStamp)
                                      (Decision ((^ $Op) $DVOp) (Event ($Prec (Truth_StructuralDeduction $DVPrecOp))
-                                                                      ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec)))))
-                                     nop)))
-        (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options (Decision (NoDecision (1.0 0.0)) subgoal) OpExpectation $t)
+                                                                      ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec))))) nop)))
+        (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options OpExpectation $t)
              (if (> (Truth_Expectation $DVOp) 0.5)
                  (Execute $Opname)
                  (DeriveSubgoals $Options)))))
@@ -44,7 +42,7 @@
                                     (sequential ((remove-atom &goal_events $Ev)
                                                  (BestDecision $t $Ev (get-state &FIFO)))))
                                (UpdateReasonerState)
-                               (if (> $t 1) (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t) nop))))
+                               (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t))))
 
 ;;Input procedure
 (= (AddGoalEvent $Sentence)

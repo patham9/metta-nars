@@ -54,7 +54,7 @@
                       (if (< (ConceptPriorityNow $CPrio $t) $Threshold) (sequential ((remove-atom &attentional_focus $C)
                                                                                      (add-atom &concepts $C))) nop)) ())
                 (let $CurrentAmount (CollapseCardinality (get-atoms &attentional_focus))
-                     (if (and (> $CurrentAmount $TargetAmount) (< $Threshold 1.0))
+                     (if (> $CurrentAmount $TargetAmount)
                          (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t) nop)))))
 
 ;get eternal belief of concept
