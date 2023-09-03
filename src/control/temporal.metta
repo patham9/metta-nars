@@ -39,9 +39,8 @@
 
 ;Whether an event's term is an operation
 (= (IsOp (Event ($Term $Truth) $Metadata))
-   (case $Term
-    (((^ $Opname) True)
-      ($Otherwise False))))
+   (case $Term (((^ $Opname) True)
+                ($Otherwise False))))
 
 ;Find implications in the event FIFO:
 (= (TemporalImplicationInduction (Cons $Cons Nil)) nop)

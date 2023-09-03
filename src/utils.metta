@@ -5,6 +5,7 @@
 (= (abs $x) (if (< $x 0) (- 0 $x) $x))
 (: sequential (-> Expression %Undefined%))
 (= (sequential $1) (superpose $1))
+(= (do $1) (case $1 ()))
 (= (TupleCount ()) 0)
 (= (TupleCount (1)) 1)
 (= (BuildTupleCounts $TOld $C $N) 
