@@ -32,7 +32,7 @@
 ;functions to select highest-priority events in belief and goal PQ
 (= (PriorityOf (Event $Sentence ($occT $Ev $Prio)) $t) (EventPriorityNow $Prio $t))
 (= (SelectHighestPriorityEvent $collection $t)
-   (let $Evs (collapse (match $collection $1 $1)) (BestCandidate $Evs PriorityOf $t)))
+   (BestCandidate (collapse (get-atoms $collection)) PriorityOf $t))
 
 ;a belief event to process, which demands adding it to the PQ and updating its concept
 (= (ProcessBeliefEvent $Ev $t)
