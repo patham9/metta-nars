@@ -30,8 +30,11 @@
                 (BestCandidate $evaluateCandidateFunction $head $tail)
                 (BestCandidate $evaluateCandidateFunction $bestCandidate $tail)))))
 
+;candidate evaluation based on confidence
 (= (ConfidenceRank (($f $c) $Ev)) $c)
 (= (ConfidenceRank Nil) 0)
+
+;pose a question of a certain term to the system on some knowledge base
 (= (Question $kb $term $steps)
    (BestCandidate ConfidenceRank Nil (collapse (let $x (Derive $kb 1 $steps) 
                                                    (case (superpose $x)
