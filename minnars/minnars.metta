@@ -1,0 +1,39 @@
+;; Stdlib extension
+(= (TupleConcat $Ev1 $Ev2) (collapse (superpose ((superpose $Ev1) (superpose $Ev2)))))
+
+;; Whether evidence was just counted once
+(= (StampDisjoint $Ev1 $Ev2)
+   (== () (collapse (let* (($x (superpose $Ev1))
+                           ($y (superpose $Ev2)))
+                          (case (== $x $y) ((True overlap)))))))
+
+;; Exhaustive-until-depth deriver
+(= (Derive $beliefs $depth $maxdepth)
+   (if (> $depth $maxdepth)
+       $beliefs
+       (let $derivations 
+            (collapse (let* (((Sentence $x $Ev1) (superpose $beliefs))
+                             ((Sentence $y $Ev2) (superpose $beliefs))
+                             ($stamp (TupleConcat $Ev1 $Ev2)))
+                            (if (StampDisjoint $Ev1 $Ev2) 
+                                (case (|- $x $y) ((($T $TV) (Sentence ($T $TV) $stamp)))) ())))
+            (Derive (TupleConcat $beliefs $derivations) (+ $depth 1) $maxdepth))))
+
+;retrieve the best candidate
+(= (BestCandidate $evaluateCandidateFunction $bestCandidate $tuple)
+  (if (== $tuple ()) 
+      $bestCandidate
+      (let* (($head (car-atom $tuple))
+             ($tail (cdr-atom $tuple)))
+            (if (> ($evaluateCandidateFunction $head)
+                   ($evaluateCandidateFunction $bestCandidate))
+                (BestCandidate $evaluateCandidateFunction $head $tail)
+                (BestCandidate $evaluateCandidateFunction $bestCandidate $tail)))))
+
+(= (ConfidenceRank (($f $c) $Ev)) $c)
+(= (ConfidenceRank Nil) 0)
+(= (Question $kb $term $steps)
+   (BestCandidate ConfidenceRank Nil (collapse (let $x (Derive $kb 1 $steps) 
+                                                   (case (superpose $x)
+                                                         (((Sentence ($T $TV) $Ev) (case (== $T $term) 
+                                                                                         ((True ($TV $Ev)))))))))))
