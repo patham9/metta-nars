@@ -32,7 +32,7 @@
 (= (|- (($P ==> $M) $T1) (($S <=> $M) $T2)) (($P ==> $S) (Truth_Analogy $T1 $T2)))
 (= (|- (($M <=> $P) $T1) (($S <=> $M) $T2)) (($S <=> $P) (Truth_Resemblance $T1 $T2)))
 ;;!Higher-order decomposition
-(= (|- (($A $T1) ($A ==> $B) $T2)) ($B (Truth_Deduction $T1 $T2)))
-(= (|- (($A $T1) (($A && $B) ==> $C) $T2)) (($B ==> $C) (Truth_Deduction $T1 $T2)))
-(= (|- ($b $T1) (($a ==> $b) $T2)) ($a (Truth_Abduction $T1 $T2)))
-(= (|- (($A $T1) ($A <=> $B) $T2)) ($B (Truth_Analogy $T1 $T2)))
+(= (|- ($A $T1) (($A ==> $B) $T2)) ($B (Truth_Deduction $T1 $T2)))
+(= (|- ($A $T1) ((($A && $B) ==> $C) $T2)) (($B ==> $C) (Truth_Deduction $T1 $T2)))
+(= (|- ($B $T1) (($A ==> $B) $T2)) ($A (Truth_Abduction $T1 $T2)))
+(= (|- ($A $T1) (($A <=> $B) $T2)) ($B (Truth_Analogy $T1 $T2)))
