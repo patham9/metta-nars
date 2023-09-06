@@ -1,1 +1,1 @@
-cat declarative.metta temporal.metta procedural.metta > CONTROL.metta
+cat declarative.metta temporal.metta pln.metta procedural.metta > CONTROL.metta
