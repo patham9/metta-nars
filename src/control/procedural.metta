@@ -22,7 +22,7 @@
                                   ((Event ($PrecTerm $PrecTV) $PrecMetadata)
                                    (Projection (EventQuestion $Prec) $t))
                                   ($DVOp (modus-ponens-formula $PrecTV $DVPrecOp))
-                                  ($DVPrec $DVPrecOp)
+                                  ($DVPrec (Truth_StructuralDeduction $DVPrecOp))
                                   ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase)))
                                  (If (StampDisjoint $SubgoalStamp)
                                      (Decision ((^ $Op) $DVOp) (Event ($Prec (Truth_StructuralDeduction $DVPrecOp))
