@@ -20,19 +20,23 @@
             (($Term1 ($f1 $c1)) $ev1)
             (($Term2 ($f2 $c2)) $ev2)))))
 
-(= (accumulateOptions $revChoiceOrBoth $option $options)
+;reduce tasks
+(= (reduceOptions $revChoiceOrBoth $option $options)
    (if (== $options ())
        $option
        (let* (($head (car-atom $options))
               ($rest (cdr-atom $options))
               ($revi ($revChoiceOrBoth $option $head)))
-             (accumulateOptions $revChoiceOrBoth $revi $rest))))
-             
+             (reduceOptions $revChoiceOrBoth $revi $rest))))
+
+;an empty event for reduction purposes
 (= (EmptyEvent) ((x (1.0 0.0)) ()))
 
-(= (evidenceQuery $Term) (accumulateOptions RevisionAndChoice (EmptyEvent) (collapse (query $Term))))
+;evidence query tries to maximize evidence for the passed statement term
+(= (evidenceQuery $Term) (reduceOptions RevisionAndChoice (EmptyEvent) (collapse (query $Term))))
 
+;choice query picks the option of highest truth expectation among the options of different term
 (= (choiceQuery $Term)
    (let $options (collapse (evidenceQuery (superpose $Term)))
-        (accumulateOptions Choice (EmptyEvent) $options)))
+        (reduceOptions Choice (EmptyEvent) $options)))
 
