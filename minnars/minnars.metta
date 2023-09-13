@@ -1,5 +1,4 @@
-;; Stdlib extension
-(= (TupleConcat $Ev1 $Ev2) (collapse (superpose ((superpose $Ev1) (superpose $Ev2)))))
+(= (|- ($T $T1) ($T $T2)) ($T (Truth_Revision $T1 $T2)))
 
 ;; Whether evidence was just counted once
 (= (StampDisjoint $Ev1 $Ev2)
@@ -15,17 +14,17 @@
             (collapse (let* (((Sentence $x $Ev1) (superpose $beliefs))
                              ((Sentence $y $Ev2) (superpose $beliefs))
                              ($stamp (TupleConcat $Ev1 $Ev2)))
-                            (if (StampDisjoint $Ev1 $Ev2) 
-                                (case (|- $x $y) ((($T $TV) (Sentence ($T $TV) $stamp)))) ())))
+                            (If (StampDisjoint $Ev1 $Ev2)
+                                (case (|- $x $y) ((($T $TV) (Sentence ($T $TV) $stamp)))))))
             (Derive (TupleConcat $beliefs $derivations) (+ $depth 1) $maxdepth))))
 
 ;retrieve the best candidate
 (= (BestCandidate $evaluateCandidateFunction $bestCandidate $tuple)
-  (if (== $tuple ()) 
+  (If (== $tuple ())
       $bestCandidate
       (let* (($head (car-atom $tuple))
              ($tail (cdr-atom $tuple)))
-            (if (> ($evaluateCandidateFunction $head)
+            (If (> ($evaluateCandidateFunction $head)
                    ($evaluateCandidateFunction $bestCandidate))
                 (BestCandidate $evaluateCandidateFunction $head $tail)
                 (BestCandidate $evaluateCandidateFunction $bestCandidate $tail)))))

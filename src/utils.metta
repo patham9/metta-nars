@@ -20,7 +20,5 @@
                     (If (< $C $N) (BuildTupleCounts $T (+ $C 1) $N))))))
 (: CountElement (-> Expression Number))
 (= (CountElement $x) (case $x (($y 1))))
-;;Build for count up to 100 (takes a few sec but it is worth it if space or generally collapse counts are often needed)
-!(BuildTupleCounts (1) 0 100)
 (: CollapseCardinality (-> Expression Number))
 (= (CollapseCardinality $expression) (TupleCount (collapse (CountElement $expression))))
