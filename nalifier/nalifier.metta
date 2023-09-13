@@ -36,7 +36,7 @@
 (= (evidenceQuery $Term) (reduceBeliefs RevisionAndChoice (EmptyEvent) (collapse (query $Term))))
 
 ;choice query picks the option of highest truth expectation among the options of different term
-(= (choiceQuery $Term)
-   (let $options (collapse (evidenceQuery (superpose $Term)))
+(= (choiceQuery $Terms)
+   (let $options (collapse (evidenceQuery (superpose $Terms)))
         (reduceBeliefs Choice (EmptyEvent) $options)))
 
