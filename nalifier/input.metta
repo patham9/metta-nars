@@ -16,7 +16,9 @@
 (((({ sam }) --> ([ small ])) (1.0 0.9)) (13))
 (((({ sam }) --> ([ quacks ])) (1.0 0.9)) (14))
 
-!(choiceQuery ((({ sam }) --> duck) (({ sam }) --> swan) (({ sam }) --> dog)))
+!(choiceQuery ((({ sam }) --> duck)
+               (({ sam }) --> swan)
+               (({ sam }) --> dog)))
 ;expected: [(((({ sam }) --> duck) (1.0 0.618320610687023)) (6 13 8 14))]
 
 
