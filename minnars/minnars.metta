@@ -36,6 +36,6 @@
 ;pose a question of a certain term to the system on some knowledge base
 (= (Question $kb $term $steps)
    (BestCandidate ConfidenceRank Nil (collapse (let $x (Derive $kb 1 $steps) 
-                                                   (case (superpose $x)
-                                                         (((Sentence ($T $TV) $Ev) (case (== $T $term) 
-                                                                                         ((True ($TV $Ev)))))))))))
+                                                    (case (superpose $x)
+                                                          (((Sentence ($T $TV) $Ev) (case (== $T $term)
+                                                                                          ((True ($TV $Ev)))))))))))
