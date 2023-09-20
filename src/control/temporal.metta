@@ -61,7 +61,7 @@
 
 ;Check if the implication's preconditions are met to anticipate the by the implication predicted outcome
 (= (Anticipate (Cons $Pos Nil) $t))
-(= (Anticipate (Cons $Pos (Cons $Pre Nil)) $t)
+(= (Anticipate (Cons $Pos (Cons $Pre $Trail)) $t)
    (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
           ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
          (If (not (IsOp $Pre))
