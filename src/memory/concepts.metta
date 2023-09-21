@@ -24,11 +24,11 @@
 ;revise if there is no evidential overlap, else use higher-confident candidate
 (= (RevisionAndChoice (Event ($Term1 ($f1 $c1)) (eternal $ev1 $EPrio1)) (Event ($Term2 ($f2 $c2)) (eternal $ev2 $EPrio2)))
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-    (If (StampDisjoint $ConclusionStamp)
-        (Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) (eternal $ConclusionStamp (0 0.0)))
-        (If (> $c1 $c2)
-            (Event ($Term1 ($f1 $c1)) (eternal $ev1 (0 0.0)))
-            (Event ($Term2 ($f2 $c2)) (eternal $ev2 (0 0.0)))))))
+        (If (StampDisjoint $ConclusionStamp)
+            (Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) (eternal $ConclusionStamp (0 0.0)))
+            (If (> $c1 $c2)
+                (Event ($Term1 ($f1 $c1)) (eternal $ev1 (0 0.0)))
+                (Event ($Term2 ($f2 $c2)) (eternal $ev2 (0 0.0)))))))
 
 ;;update beliefs in existing concept with the new event or create new concept to enter the new evidence
 (= (UpdateConcept $NewEvent $t)
