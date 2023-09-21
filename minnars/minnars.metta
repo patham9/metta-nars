@@ -1,12 +1,12 @@
 (= (|- ($T $T1) ($T $T2)) ($T (Truth_Revision $T1 $T2)))
 
-;; Whether evidence was just counted once
+;Whether evidence was just counted once
 (= (StampDisjoint $Ev1 $Ev2)
    (== () (collapse (let* (($x (superpose $Ev1))
                            ($y (superpose $Ev2)))
                           (case (== $x $y) ((True overlap)))))))
 
-;; Exhaustive-until-depth deriver
+;Exhaustive-until-depth deriver
 (= (Derive $beliefs $depth $maxdepth)
    (if (> $depth $maxdepth)
        $beliefs

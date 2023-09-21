@@ -30,7 +30,7 @@
                 (Event ($Term1 ($f1 $c1)) (eternal $ev1 (0 0.0)))
                 (Event ($Term2 ($f2 $c2)) (eternal $ev2 (0 0.0)))))))
 
-;;update beliefs in existing concept with the new event or create new concept to enter the new evidence
+;update beliefs in existing concept with the new event or create new concept to enter the new evidence
 (= (UpdateConcept $NewEvent $t)
    (let* (((Event ($Term $TV) ($Time $Evidence $EPrio)) $NewEvent)
           ($NewEventEternalized (Eternalize $NewEvent))

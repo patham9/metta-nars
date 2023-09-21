@@ -74,7 +74,7 @@
          (If (and (IsOp $Op) (not (IsOp $Pre)))
              (NegConfirmation ($PreTerm &/ $OpTerm) $PosTerm $t))))
 
-;;Input procedure
+;Input procedure
 (= (AddBeliefEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
           ($InputEvent (Event $Sentence ($t $evidentialBase ($t 1.0)))))
