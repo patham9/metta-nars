@@ -10,5 +10,6 @@ cd memory
 sh build.sh
 cd ..
 
-cat utils.metta ./logic/LOGIC.metta ./memory/MEMORY.metta ./control/CONTROL.metta > NARS.metta
-echo "!(BuildTupleCounts (1) 0 100)" >> NARS.metta #utils configuration
+python3 helper.py > HELP.metta
+cat utils.metta HELP.metta ./logic/LOGIC.metta ./memory/MEMORY.metta ./control/CONTROL.metta > NARS.metta
+#echo "!(BuildTupleCounts (1) 0 100)" >> NARS.metta #utils configuration

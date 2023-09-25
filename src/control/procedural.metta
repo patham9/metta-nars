@@ -37,7 +37,8 @@
                                     (sequential ((do (remove-atom &goal_events $Ev))
                                                  (BestDecision $t $Ev (get-state &FIFO)))))
                                (do (UpdateReasonerState))
-                               (do (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t)))))
+                               (do (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t))
+                               (do (trace! GOAL_CYCLE ())))))
 
 ;Input procedure
 (= (AddGoalEvent $Sentence)

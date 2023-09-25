@@ -15,16 +15,15 @@
                                                    (Projection $Belief $TaskTime)))
 
 ;FIFO max. size bound
-!(bind! &FIFO (new-state Nil))
-(= (ListFirstK $C Nil) Nil)
-(= (ListFirstK $C (Cons $LH $LT))
-   (If (> $C 0)
-       (Cons $LH (ListFirstK (- $C 1) $LT))
-       Nil))
+!(bind! &FIFO (new-state ()))
+(= (EventWithFIFO3 $New ($1 $2 $3)) ($New $1 $2))
+(= (EventWithFIFO3 $New ($1 $2)) ($New $1 $2))
+(= (EventWithFIFO3 $New ($1)) ($New $1))
+(= (EventWithFIFO3 $New ()) ($New))
 
 ;Add event to FIFO
 (= (EventToFIFO $Ev)
-   (let $newlist (ListFirstK 3 (Cons $Ev (get-state &FIFO)))
+   (let $newlist (EventWithFIFO3 $Ev (get-state &FIFO))
         (change-state! &FIFO $newlist)))
 
 ;Form a sequence of two events
@@ -44,14 +43,14 @@
 
 ;Find implications in the event FIFO:
 ;procedural implications
-(= (TemporalImplicationInduction (Cons $Cons (Cons $Op (Cons $Prec $Tail))))
+(= (TemporalImplicationInduction ($Cons $Op $Prec))
    (If (and (IsOp $Op) (and (not (IsOp $Cons)) (not (IsOp $Prec))))
        (let $PrecOp (TemporalSequence $Prec $Op)
             (TemporalImplication $PrecOp $Cons))))
 ;and temporal without operation
-(= (TemporalImplicationInduction (Cons $Cons (Cons $Prec $Tail)))
-   (If (and (not (IsOp $Prec)) (not (IsOp $Cons)))
-       (TemporalImplication $Prec $Cons)))
+;(= (TemporalImplicationInduction ($Cons $Prec $Other))
+;   (If (and (not (IsOp $Prec)) (not (IsOp $Cons)))
+;       (TemporalImplication $Prec $Cons)))
 
 ;Add negative evidence for implications which predicted the input unsuccessfully
 (= (NegConfirmation $PrecTerm $ObservedCons $t)
@@ -60,13 +59,12 @@
             (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t () (0 0.0))) $t))))
 
 ;Check if the implication's preconditions are met to anticipate the by the implication predicted outcome
-(= (Anticipate (Cons $Pos Nil) $t))
-(= (Anticipate (Cons $Pos (Cons $Pre $Trail)) $t)
-   (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
-          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
-         (If (not (IsOp $Pre))
-             (NegConfirmation $PreTerm $PosTerm $t))))
-(= (Anticipate (Cons $Pos (Cons $Op (Cons $Pre $Trail))) $t)
+;(= (Anticipate ($Pos $Pre $Trail) $t)
+;   (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
+;          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
+;         (If (not (IsOp $Pre))
+;             (NegConfirmation $PreTerm $PosTerm $t))))
+(= (Anticipate ($Pos $Op $Pre) $t)
    (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
           ((Event ($OpTerm $OpTV) $OpMetadata) $Op)
           ((Event ($PosTerm $PosTV) $PosMetadata) $Pos)
@@ -83,4 +81,5 @@
                                (UpdateConcept $InducedHypothesis $t))
                           (ProcessBeliefEvent $InputEvent $t)
                           (Anticipate (get-state &FIFO) $t)
-                          (BeliefCycle $t))))))
+                          (BeliefCycle $t)
+                          )))))
