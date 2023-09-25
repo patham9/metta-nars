@@ -75,7 +75,7 @@
 ;Input procedure
 (= (AddBeliefEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
-          ($InputEvent (Event $Sentence ($t $evidentialBase ($t 1.0)))))
+          ($InputEvent (Event (trace! (. $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
          (do (sequential ((EventToFIFO $InputEvent)
                           (let $InducedHypothesis (TemporalImplicationInduction (get-state &FIFO))
                                (UpdateConcept $InducedHypothesis $t))

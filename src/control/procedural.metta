@@ -7,12 +7,12 @@
 (= (OpExpectation (Decision ($Opname $DVOp) $Subgoal) $t) (Truth_Expectation $DVOp))
 
 ;Inject executed operation as an event and return its name
-(= (Execute $Opname) (superpose ((AddBeliefEvent ($Opname (1.0 0.9))) $Opname)))
+(= (Execute $Opname) (trace! (EXE $Opname) (superpose ((AddBeliefEvent ($Opname (1.0 0.9))) $Opname))))
 
 ;Add subgoals to the PQ
 (= (DeriveSubgoals $Options)
    (do (let (Decision $Op $Subgoal) (superpose $Options)
-            (add-atom &goal_events $Subgoal))))
+            (add-atom &goal_events (trace! (! $Subgoal) $Subgoal)))))
 
 ;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals
 (= (BestDecision $t (Event ($Term $DV) ($GoalTime $GoalEvBase $GoalPrio)) $FIFO)
@@ -38,11 +38,11 @@
                                                  (BestDecision $t $Ev (get-state &FIFO)))))
                                (do (UpdateReasonerState))
                                (do (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t))
-                               (do (trace! GOAL_CYCLE ())))))
+                               (do (trace! (GOAL_CYCLE t = $t) ())))))
 
 ;Input procedure
 (= (AddGoalEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
-          ($InputEvent (Event $Sentence ($t $evidentialBase ($t 1.0)))))
+          ($InputEvent (Event (trace! (! $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
          (sequential ((do (add-atom &goal_events $InputEvent))
                       (GoalCycle $t)))))
