@@ -61,9 +61,13 @@
 ;get eternal belief of concept
 (: EternalQuestion (-> Expression $t))
 (= (EternalQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $Belief)
-                                 (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (eternal Nil 0.0))))))
+                                 (($Ev $Ev) (%void% (case (match &belief_events (Event ($Term $TV) $Metadata) (Event ($Term $TV) $Metadata))
+                                                          (($Ev (sequential ((do (UpdateConcept $Ev (get-state &currentTime))) (Eternalize $Ev))))
+                                                           (%void% (Event (None (0.5 0.0)) (eternal Nil (0 0.0))))))))))
 
 ;get event belief of concept
 (: EventQuestion (-> Expression $t))
 (= (EventQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $BeliefEvent)
-                               (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (0 Nil 0.0))))))
+                                                  (($Ev $Ev) (%void% (case (match &belief_events (Event ($Term $TV) $Metadata) (Event ($Term $TV) $Metadata))
+                                                                           (($Ev (sequential ((do (UpdateConcept $Ev (get-state &currentTime))) $Ev)))
+                                                                            (%void% (Event (None (0.5 0.0)) (eternal Nil (0 0.0))))))))))

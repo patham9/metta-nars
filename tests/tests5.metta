@@ -6,6 +6,14 @@
 !(AddBeliefEvent ((({ instance1 }) --> ([ white ])) (1.0 0.9)))
 !(AddBeliefEvent ((({ instance1 }) --> ([ see ])) (1.0 0.9)))
 
+;a few inference steps
+!(BeliefCycle (get-state &currentTime))
+!(BeliefCycle (get-state &currentTime))
+!(BeliefCycle (get-state &currentTime))
+!(BeliefCycle (get-state &currentTime))
+!(BeliefCycle (get-state &currentTime))
+!(BeliefCycle (get-state &currentTime))
+
 !(EternalQuestion (({ instance1 }) --> sheep))
 ;[(Event ((({ instance1 }) --> sheep) (1.0 0.30916030534351147)) (eternal (4 3) (0 0.0)))]
 !(EternalQuestion (sheep --> ([ see ])))

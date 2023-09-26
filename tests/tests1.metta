@@ -3,8 +3,12 @@
 !(AddBeliefEvent (((cat * sky) --> like) (1.0 0.9)))
 !(AddBeliefEvent ((sky --> ([ blue ])) (1.0 0.9)))
 
+;a few inference steps
+!(BeliefCycle (get-state &currentTime))
+!(BeliefCycle (get-state &currentTime))
+
 ;The following question needs both a deduction and abduction step:
-!(EternalQuestion ((({ garfield }) * ([ blue ])) --> like))
+!(let $x (EternalQuestion ((({ garfield }) * ([ blue ])) --> like)) (trace! $x $x))
 ;expected: [(Event (((({ garfield }) * ([ blue ])) --> like) (1.0 0.2965825874694874)) (eternal (Cons 2 (Cons 1 (Cons 3 Nil))) 0.643288027761712))]
 
 ;Lets stress the control mechanism as these type of events with common extension or intension causes dozens of derivations:
