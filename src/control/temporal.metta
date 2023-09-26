@@ -80,7 +80,7 @@
           ($notAnOperation (not (IsOp $InputEvent))))
           (do (sequential ((EventToFIFO $InputEvent)
                            (Anticipate (get-state &FIFO) $t)
-                           (if $notAnOperation
+                           (If $notAnOperation
                                (sequential ((let $InducedHypothesis (TemporalImplicationInduction (get-state &FIFO))
                                                  (UpdateConcept $InducedHypothesis $t))
                                             (ProcessBeliefEvent $InputEvent $t)
