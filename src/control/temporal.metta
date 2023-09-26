@@ -34,7 +34,8 @@
 ;Form a temporal implication between two events
 (= (TemporalImplication $Ev1 (Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))
    (let (Event ($Term1 $Truth1) ($Time1 $Evidence1 $EPrio1)) (Projection $Ev1 $Time2)
-        (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0)))))
+        (trace! (. (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)))
+                (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0))))))
 
 ;Whether an event's term is an operation
 (= (IsOp (Event ($Term $Truth) $Metadata))
@@ -48,7 +49,7 @@
        (let $PrecOp (TemporalSequence $Prec $Op)
             (TemporalImplication $PrecOp $Cons))))
 ;and temporal without operation
-;(= (TemporalImplicationInduction ($Cons $Prec $Other))
+;(= (TemporalImplicationInduction ($Cons $Prec $Trail))
 ;   (If (and (not (IsOp $Prec)) (not (IsOp $Cons)))
 ;       (TemporalImplication $Prec $Cons)))
 
@@ -75,11 +76,13 @@
 ;Input procedure
 (= (AddBeliefEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
-          ($InputEvent (Event (trace! (. $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
-         (do (sequential ((EventToFIFO $InputEvent)
-                          (let $InducedHypothesis (TemporalImplicationInduction (get-state &FIFO))
-                               (UpdateConcept $InducedHypothesis $t))
-                          (ProcessBeliefEvent $InputEvent $t)
-                          (Anticipate (get-state &FIFO) $t)
-                          (BeliefCycle $t)
-                          )))))
+          ($InputEvent (Event (trace! (. $Sentence) $Sentence) ($t $evidentialBase ($t 1.0))))
+          ($notAnOperation (not (IsOp $InputEvent))))
+          (do (sequential ((EventToFIFO $InputEvent)
+                           (Anticipate (get-state &FIFO) $t)
+                           (if $notAnOperation
+                               (sequential ((let $InducedHypothesis (TemporalImplicationInduction (get-state &FIFO))
+                                                 (UpdateConcept $InducedHypothesis $t))
+                                            (ProcessBeliefEvent $InputEvent $t)
+                                            (BeliefCycle $t)))
+                               (UpdateReasonerState)))))))
