@@ -8,7 +8,7 @@
 
 ;Exhaustive-until-depth deriver
 (= (Derive $beliefs $depth $maxdepth)
-   (if (> $depth $maxdepth)
+   (If (> $depth $maxdepth)
        $beliefs
        (let $derivations 
             (collapse (let* (((Sentence $x $Ev1) (superpose $beliefs))

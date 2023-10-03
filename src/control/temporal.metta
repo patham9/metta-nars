@@ -15,16 +15,15 @@
                                                    (Projection $Belief $TaskTime)))
 
 ;FIFO max. size bound
-!(bind! &FIFO (new-state Nil))
-(= (ListFirstK $C Nil) Nil)
-(= (ListFirstK $C (Cons $LH $LT))
-   (If (> $C 0)
-       (Cons $LH (ListFirstK (- $C 1) $LT))
-       Nil))
+!(bind! &FIFO (new-state ()))
+(= (EventWithFIFO3 $New ($1 $2 $3)) ($New $1 $2))
+(= (EventWithFIFO3 $New ($1 $2)) ($New $1 $2))
+(= (EventWithFIFO3 $New ($1)) ($New $1))
+(= (EventWithFIFO3 $New ()) ($New))
 
 ;Add event to FIFO
 (= (EventToFIFO $Ev)
-   (let $newlist (ListFirstK 3 (Cons $Ev (get-state &FIFO)))
+   (let $newlist (EventWithFIFO3 $Ev (get-state &FIFO))
         (change-state! &FIFO $newlist)))
 
 ;Form a sequence of two events
@@ -35,7 +34,8 @@
 ;Form a temporal implication between two events
 (= (TemporalImplication $Ev1 (Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))
    (let (Event ($Term1 $Truth1) ($Time1 $Evidence1 $EPrio1)) (Projection $Ev1 $Time2)
-        (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0)))))
+        (trace! (. (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)))
+                (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0))))))
 
 ;Whether an event's term is an operation
 (= (IsOp (Event ($Term $Truth) $Metadata))
@@ -44,14 +44,14 @@
 
 ;Find implications in the event FIFO:
 ;procedural implications
-(= (TemporalImplicationInduction (Cons $Cons (Cons $Op (Cons $Prec $Tail))))
+(= (TemporalImplicationInduction ($Cons $Op $Prec))
    (If (and (IsOp $Op) (and (not (IsOp $Cons)) (not (IsOp $Prec))))
        (let $PrecOp (TemporalSequence $Prec $Op)
             (TemporalImplication $PrecOp $Cons))))
 ;and temporal without operation
-(= (TemporalImplicationInduction (Cons $Cons (Cons $Prec $Tail)))
-   (If (and (not (IsOp $Prec)) (not (IsOp $Cons)))
-       (TemporalImplication $Prec $Cons)))
+;(= (TemporalImplicationInduction ($Cons $Prec $Trail))
+;   (If (and (not (IsOp $Prec)) (not (IsOp $Cons)))
+;       (TemporalImplication $Prec $Cons)))
 
 ;Add negative evidence for implications which predicted the input unsuccessfully
 (= (NegConfirmation $PrecTerm $ObservedCons $t)
@@ -60,13 +60,12 @@
             (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t () (0 0.0))) $t))))
 
 ;Check if the implication's preconditions are met to anticipate the by the implication predicted outcome
-(= (Anticipate (Cons $Pos Nil) $t))
-(= (Anticipate (Cons $Pos (Cons $Pre $Trail)) $t)
-   (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
-          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
-         (If (not (IsOp $Pre))
-             (NegConfirmation $PreTerm $PosTerm $t))))
-(= (Anticipate (Cons $Pos (Cons $Op (Cons $Pre $Trail))) $t)
+;(= (Anticipate ($Pos $Pre $Trail) $t)
+;   (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
+;          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
+;         (If (not (IsOp $Pre))
+;             (NegConfirmation $PreTerm $PosTerm $t))))
+(= (Anticipate ($Pos $Op $Pre) $t)
    (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
           ((Event ($OpTerm $OpTV) $OpMetadata) $Op)
           ((Event ($PosTerm $PosTV) $PosMetadata) $Pos)
@@ -77,10 +76,13 @@
 ;Input procedure
 (= (AddBeliefEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
-          ($InputEvent (Event $Sentence ($t $evidentialBase ($t 1.0)))))
-         (do (sequential ((EventToFIFO $InputEvent)
-                          (let $InducedHypothesis (TemporalImplicationInduction (get-state &FIFO))
-                               (UpdateConcept $InducedHypothesis $t))
-                          (ProcessBeliefEvent $InputEvent $t)
-                          (Anticipate (get-state &FIFO) $t)
-                          (BeliefCycle $t))))))
+          ($InputEvent (Event (trace! (. $Sentence) $Sentence) ($t $evidentialBase ($t 1.0))))
+          ($notAnOperation (not (IsOp $InputEvent))))
+          (do (sequential ((EventToFIFO $InputEvent)
+                           (Anticipate (get-state &FIFO) $t)
+                           (If $notAnOperation
+                               (sequential ((let $InducedHypothesis (TemporalImplicationInduction (get-state &FIFO))
+                                                 (UpdateConcept $InducedHypothesis $t))
+                                            (ProcessBeliefEvent $InputEvent $t)
+                                            (BeliefCycle $t)))
+                               (UpdateReasonerState)))))))

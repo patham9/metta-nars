@@ -16,13 +16,13 @@
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
     (If (StampDisjoint $ev1 $ev2)
         (($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) $ConclusionStamp)
-        (if (> $c1 $c2) 
+        (If (> $c1 $c2)
             (($Term1 ($f1 $c1)) $ev1)
             (($Term2 ($f2 $c2)) $ev2)))))
 
 ;reduce beliefs
 (= (reduceBeliefs $revChoiceOrBoth $option $options)
-   (if (== $options ())
+   (If (== $options ())
        $option
        (let* (($head (car-atom $options))
               ($rest (cdr-atom $options))
