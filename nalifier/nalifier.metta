@@ -1,8 +1,8 @@
 (= (query $Term)
-   (match &self (= (|- ($A $T1) ($B $T2)) ($Term ($f $T1 $T2)))
-          (match &self (, (($A $T1) $Ev1) (($B $T2) $Ev2))
-                 (If (StampDisjoint $Ev1 $Ev2)
-                     (($Term ($f $T1 $T2)) (TupleConcat $Ev1 $Ev2))))))
+   (match &self (, (= (|- ($A $T1) ($B $T2)) ($Term ($f $T1 $T2)))
+                      (($A $T1) $Ev1) (($B $T2) $Ev2))
+          (If (StampDisjoint $Ev1 $Ev2)
+              (($Term ($f $T1 $T2)) (TupleConcat $Ev1 $Ev2)))))
 
 ;choice between two options of different term
 (= (Choice (($Term1 $T1) $ev1) (($Term2 $T2) $ev2))
