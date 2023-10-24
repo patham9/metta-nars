@@ -14,11 +14,11 @@
 ;revise if there is no evidential overlap, else use higher-confident candidate
 (= (RevisionAndChoice (($Term1 ($f1 $c1)) $ev1) (($Term2 ($f2 $c2)) $ev2))
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-    (If (StampDisjoint $ev1 $ev2)
-        (($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) $ConclusionStamp)
-        (If (> $c1 $c2)
-            (($Term1 ($f1 $c1)) $ev1)
-            (($Term2 ($f2 $c2)) $ev2)))))
+        (If (StampDisjoint $ev1 $ev2)
+            (($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) $ConclusionStamp)
+            (If (> $c1 $c2)
+                (($Term1 ($f1 $c1)) $ev1)
+                (($Term2 ($f2 $c2)) $ev2)))))
 
 ;reduce beliefs
 (= (reduceBeliefs $revChoiceOrBoth $option $options)
