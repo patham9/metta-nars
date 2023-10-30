@@ -2,7 +2,7 @@
 
 ;use the event's evidence to induce a time-independent belief which can be used in the future
 (= (Eternalize $Ev) (let ('Event ($Term $TV) ($Time $Evidence $EPrio)) $Ev
-                         (If (== $Time eternal) $Ev
+                         (If (== $Time 'eternal) $Ev
                              ('Event ($Term (Truth_Eternalize $TV)) ('eternal  $Evidence (0 0.0))))))
 
 ;use evidence of an event at a slightly different moment in time
@@ -76,13 +76,15 @@
 ;Input procedure
 (= (AddBeliefEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState 'dummy))
-          ($InputEvent ('Event (trace! ('pt $Sentence) $Sentence) ($t $evidentialBase ($t 1.0))))
+          ($InputEvent ('Event $Sentence ($t $evidentialBase ($t 1.0))))
           ($notAnOperation (not (IsOp $InputEvent))))
-          (do (sequential ((EventToFIFO $InputEvent)
-                           (Anticipate (get-state '&FIFO) $t)
+          (do (sequential ((display "AddBeliefEvent-")
+                           (EventToFIFO $InputEvent)
+                           ;(Anticipate (get-state '&FIFO) $t) TODO
                            (If $notAnOperation
-                               (sequential ((let $InducedHypothesis (TemporalImplicationInduction (get-state '&FIFO))
-                                                 (UpdateConcept $InducedHypothesis $t))
+                               (sequential ((display "NOTANOP!!!!")
+                                            ;(let $InducedHypothesis (TemporalImplicationInduction (get-state '&FIFO))
+                                            ;     (UpdateConcept $InducedHypothesis $t))
                                             (ProcessBeliefEvent $InputEvent $t)
                                             (BeliefCycle $t)))
                                (UpdateReasonerState)))))))

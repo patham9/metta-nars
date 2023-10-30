@@ -26,8 +26,10 @@
 
 ;select the highest priority belief event from the PQ and use it for reasoning
 (= (BeliefCycle $t) (do (sequential ((let $Ev (SelectHighestPriorityEvent '&belief_events $t)
-                                          (sequential ((remove-atom '&belief_events $Ev)
-                                                       (ReasonWithTask $Ev $t))))
+                                          (If (not (== $Ev ()))
+                                              (sequential (;(display "selected") (newline) (display $Ev)
+                                                       (remove-atom '&belief_events $Ev)
+                                                       (ReasonWithTask $Ev $t)))))
                                      (UpdateReasonerState)
                                      (BoundEvents '&belief_events 0.0 0.1 (BeliefEventsMax 'dummy) $t)
                                      (BoundAttention 0.0 0.1 (AttentionalFocusConceptsMax) $t)))))

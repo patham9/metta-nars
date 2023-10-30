@@ -1,3 +1,3 @@
 sh build.sh && cat ./src/NARS.metta $1 > RUN.metta
 cd ..
-sh runscheme.sh ./metta-nars/RUN.metta
+sh runmetta.sh ./metta-nars/RUN.metta

@@ -37,7 +37,9 @@
 ;a belief event to process, which demands adding it to the PQ and updating its concept
 (= (ProcessBeliefEvent $Ev $t)
    (sequential ((add-atom '&belief_events $Ev)
-                (UpdateConcept $Ev $t))))
+                (display "added to PQ")
+                (UpdateConcept $Ev $t)
+                (display "updated concept to PQ"))))
 
 ;bound the size of the attentional focus for tasks / events
 (= (BoundEvents $collection $Threshold $Increment $TargetAmount $t)

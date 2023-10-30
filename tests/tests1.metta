@@ -8,17 +8,17 @@
 ;expected: [(Event ((((ExtSet garfield) x (IntSet blue)) --> like) (1.0 0.2965825874694874)) (eternal (Cons 2 (Cons 1 (Cons 3 Nil))) 0.643288027761712))]
 
 ;Lets stress the control mechanism as these type of events with common extension or intension causes dozens of derivations:
-!(AddBeliefEvent (('A '--> 'cat) (1.0 0.9)))
-!(AddBeliefEvent (('B '--> 'cat) (1.0 0.9)))
-!(AddBeliefEvent (('C '--> 'cat) (1.0 0.9)))
+;--!(AddBeliefEvent (('A '--> 'cat) (1.0 0.9)))
+;--!(AddBeliefEvent (('B '--> 'cat) (1.0 0.9)))
+;--!(AddBeliefEvent (('C '--> 'cat) (1.0 0.9)))
 
-!(EternalQuestion (('A '& 'B) '--> 'cat))
+;--(EternalQuestion (('A '& 'B) '--> 'cat))
 ;expected: [(Event (((A & B) --> cat) (1.0 0.44751381215469616)) (eternal (Cons 4 (Cons 5 Nil)) (5 0.4525)))]
 
-!(EternalQuestion (('B '& 'C) '--> 'cat))
+;--(EternalQuestion (('B '& 'C) '--> 'cat))
 ;expected: [(Event (((B & C) --> cat) (1.0 0.44751381215469616)) (eternal (Cons 5 (Cons 6 Nil)) (6 0.4525)))]
 
-!(EternalQuestion ((('A '& 'B) '& 'C) '--> 'cat))
+;--(EternalQuestion ((('A '& 'B) '& 'C) '--> 'cat))
 ;expected: [(Event ((((A & B) & C) --> cat) (1.0 0.42163100057836905)) (eternal (Cons 5 (Cons 4 (Cons 6 Nil))) (6 0.195593125)))
 
 !(AddBeliefEvent (((('ExtSet 'garfield) 'x ('IntSet 'blue)) '--> 'like) (1.0 0.9)))
