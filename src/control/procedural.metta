@@ -12,7 +12,7 @@
 ;Add subgoals to the PQ
 (= (DeriveSubgoals $Options)
    (do (let ('Decision $Op ('Event $S $Metadata)) (superpose $Options)
-            (let $Subgoal ('Event (trace! (! $S) $S) $Metadata)
+            (let $Subgoal ('Event $S $Metadata) ;(trace! (! $S) $S)
                  (add-atom '&goal_events $Subgoal)))))
 
 ;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals

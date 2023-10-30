@@ -10,7 +10,7 @@
    ('Event ($Term ($f (* $c (min 1 (/ 1 (abs (- $Time $TargetTime))))))) ($TargetTime $Evidence $EPrio)))
 
 ;make the belief occurrence time compatible with the task's
-(= (TemporallyAlignedBelief $TaskTime $Belief) (If (== $TaskTime eternal)
+(= (TemporallyAlignedBelief $TaskTime $Belief) (If (== $TaskTime 'eternal)
                                                    (Eternalize $Belief)
                                                    (Projection $Belief $TaskTime)))
 
@@ -24,7 +24,7 @@
 ;Add event to FIFO
 (= (EventToFIFO $Ev)
    (let $newlist (EventWithFIFO3 $Ev (get-state '&FIFO))
-        (change-state! '&FIFO $newlist)))
+        (sequential (change-state! '&FIFO $newlist))))
 
 ;Form a sequence of two events
 (= (TemporalSequence $Ev1 ('Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))

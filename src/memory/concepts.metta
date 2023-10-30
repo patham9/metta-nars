@@ -9,44 +9,52 @@
 (= (ConceptPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
 
 ;whether evidence was just counted once
-!(bind! '&tempstate (new-state False))
-!(bind! '&tempset (new-space))
-(= (StampDisjoint $x)
-   (not (sequential ((do (change-state! '&tempstate False))
-                     (do (case (get-atoms '&tempset)
-                         (($y (remove-atom '&tempset $y)))))
-                     (do (let $z (superpose $x)
-                              (case (match '&tempset $z $z)
-                                    (($w (change-state! '&tempstate True))
-                                     (%void% (add-atom '&tempset $z))))))
-                     (get-state '&tempstate)))))
-               
+;!(bind! '&tempstate (new-state False))
+;!(bind! '&tempset (new-space))
+;(= (StampDisjoint $x)
+;   (sequential (not (sequential ((do (change-state! '&tempstate False))
+;                     (do (case (get-atoms '&tempset)
+;                         (($y (remove-atom '&tempset $y)))))
+;                     (do (let $z (superpose $x)
+;                              (case (match '&tempset $z $z)
+;                                    (($w (change-state! '&tempstate True))
+;                                     (%void% (add-atom '&tempset $z))))))
+;                     (get-state '&tempstate))))))
+
+;Whether evidence was just counted once
+(= (StampDisjoint $Ev1 $Ev2)
+   (== () (collapse (let* (($x (superpose $Ev1))
+                           ($y (superpose $Ev2)))
+                          (case (== $x $y) ((True 'overlap)))))))
+
 ;revise if there is no evidential overlap, else use higher-confident candidate
-(= (RevisionAndChoice ('Event ($Term1 ($f1 $c1)) ('eternal  $ev1 $EPrio1)) ('Event ($Term2 ($f2 $c2)) ('eternal  $ev2 $EPrio2)))
+(= (RevisionAndChoice ('Event ($Term1 ($f1 $c1)) ('eternal $ev1 $EPrio1)) ('Event ($Term2 ($f2 $c2)) ('eternal $ev2 $EPrio2)))
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-        (If (StampDisjoint $ConclusionStamp)
+        (If (StampDisjoint $ev1 $ev2) ;True ;(StampDisjoint $ConclusionStamp)
             ('Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) ('eternal  $ConclusionStamp (0 0.0)))
             (If (> $c1 $c2)
-                ('Event ($Term1 ($f1 $c1)) ('eternal  $ev1 (0 0.0)))
-                ('Event ($Term2 ($f2 $c2)) ('eternal  $ev2 (0 0.0)))))))
+                ('Event ($Term1 ($f1 $c1)) ('eternal $ev1 (0 0.0)))
+                ('Event ($Term2 ($f2 $c2)) ('eternal $ev2 (0 0.0)))))))
 
 ;update beliefs in existing concept with the new event or create new concept to enter the new evidence
 (= (UpdateConcept $NewEvent $t)
    (let* ((('Event ($Term $TV) ($Time $Evidence $EPrio)) $NewEvent)
           ($NewEventEternalized (Eternalize (trace! $NewEvent $NewEvent))))
-         (sequential (;(display $NewEvent)
+        ; (sequential (;(display $NewEvent)
                       (case (match '&attentional_focus ('Concept $TermX $Belief $BeliefEvent $CPrio) 
                                                        (If (== $TermX $Term) ('Concept $TermX $Belief $BeliefEvent $CPrio)))
-                            ((('Concept $TermX $Belief $BeliefEvent $CPrio) (sequential (;(display "CONCEPT MATCHED!")
+                            ((('Concept $TermX $Belief $BeliefEvent $CPrio) (sequential ((display "CONCEPT MATCHED!")
                                                          (remove-atom '&attentional_focus ('Concept $TermX $Belief $BeliefEvent $CPrio))
+                                                         (display "REVISED111") (display $BeliefEvent)
                                                          (let* ((('Event $RevSentence $Metadata) (RevisionAndChoice $Belief $NewEventEternalized))
                                                                 ($RevisedBelief ('Event $RevSentence $Metadata))
                                                                 ($MaxPrio (If (> (EventPriorityNow $EPrio $t) (ConceptPriorityNow $CPrio $t))
                                                                               $EPrio $CPrio)))
-                                                         (sequential 
-                                                         (;(display (@ $RevSentence)) 
+                                                         (sequential (
+                                                          (display "REVISED!!!!") 
                                                           (add-atom '&attentional_focus ('Concept $Term $RevisedBelief $NewEvent $MaxPrio))))
-                                                         ))))
+                                                         ))
+                                                         ))
                              (%void% (sequential ( ;(display "NO MATCH IN CONCEPTS")
                                             (case (match '&concepts ('Concept $TermX2 $Belief2 $BeliefEvent2 $CPrio2)
                                                              (If (== $TermX2 $Term) ('Concept $TermX2 $Belief2 $BeliefEvent2 $CPrio2)))
@@ -56,7 +64,7 @@
                                                                         (UpdateConcept $NewEvent $t))))
                                             (%void% (sequential (
                                                 ;(display "added to AF;;;;")
-                                                (add-atom '&attentional_focus ('Concept $Term $NewEventEternalized $NewEvent $EPrio))))))))))))))))
+                                                (add-atom '&attentional_focus ('Concept $Term $NewEventEternalized $NewEvent $EPrio))))))))))))));))
 
 ;bound the size of attentional focus of concepts
 (= (BoundAttention $Threshold $Increment $TargetAmount $t)
