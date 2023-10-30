@@ -1,30 +1,30 @@
-!(AddBeliefEvent (ballleft (1.0 0.9)))
-!(AddBeliefEvent ((^ left) (1.0 0.9)))
-!(AddBeliefEvent (ballhit (1.0 0.9)))
+!(AddBeliefEvent ('ballleft (1.0 0.9)))
+!(AddBeliefEvent (('^ 'left) (1.0 0.9)))
+!(AddBeliefEvent ('ballhit (1.0 0.9)))
 
-!(AddBeliefEvent (ballleft (1.0 0.9)))
-!(AddBeliefEvent ((^ left) (1.0 0.9)))
+!(AddBeliefEvent ('ballleft (1.0 0.9)))
+!(AddBeliefEvent (('^ 'left) (1.0 0.9)))
 
-!(AddBeliefEvent (ballright (1.0 0.9)))
-!(AddBeliefEvent ((^ left) (1.0 0.9)))
-!(AddBeliefEvent (ballhit (1.0 0.9)))
+!(AddBeliefEvent ('ballright (1.0 0.9)))
+!(AddBeliefEvent (('^ 'left) (1.0 0.9)))
+!(AddBeliefEvent ('ballhit (1.0 0.9)))
 
-!(AddBeliefEvent (ballright (1.0 0.9)))
-!(AddBeliefEvent ((^ right) (1.0 0.9)))
-!(AddBeliefEvent (ballhit (1.0 0.9)))
+!(AddBeliefEvent ('ballright (1.0 0.9)))
+!(AddBeliefEvent (('^ 'right) (1.0 0.9)))
+!(AddBeliefEvent ('ballhit (1.0 0.9)))
 
-!(AddBeliefEvent (ballright (1.0 0.9)))
-!(AddBeliefEvent ((^ right) (1.0 0.9)))
-!(AddBeliefEvent (ballhit (1.0 0.9)))
+!(AddBeliefEvent ('ballright (1.0 0.9)))
+!(AddBeliefEvent (('^ 'right) (1.0 0.9)))
+!(AddBeliefEvent ('ballhit (1.0 0.9)))
 
 ;just for looking at the hypotheses:
-!(EternalQuestion ((ballleft &/ (^ $Op)) =/> ballhit))
-!(EternalQuestion ((ballright &/ (^ $Op)) =/> ballhit))
+!(EternalQuestion (('ballleft '&/ ('^ $Op)) '=/> 'ballhit))
+!(EternalQuestion (('ballright '&/ ('^ $Op)) '=/> 'ballhit))
 
-!(AddBeliefEvent (ballleft (1.0 0.9)))
-!(AddGoalEvent (ballhit (1.0 0.9)))
-;expected: [(^ left)]
+!(AddBeliefEvent ('ballleft (1.0 0.9)))
+!(AddGoalEvent ('ballhit (1.0 0.9)))
+;expected: [('^ 'left)]
 
-!(AddBeliefEvent (ballright (1.0 0.9)))
-!(AddGoalEvent (ballhit (1.0 0.9)))
-;expected: [(^ right)]
+!(AddBeliefEvent ('ballright (1.0 0.9)))
+!(AddGoalEvent ('ballhit (1.0 0.9)))
+;expected: [('^ 'right)]
