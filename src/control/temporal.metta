@@ -79,10 +79,10 @@
           ($InputEvent ('Event (trace! (': $Sentence) $Sentence) ($t $evidentialBase ($t 1.0))))
           ($notAnOperation (not (IsOp $InputEvent))))
           (do (sequential ((EventToFIFO $InputEvent)
-                           ;(Anticipate (get-state '&FIFO) $t)
+                           (Anticipate (get-state '&FIFO) $t)
                            (If $notAnOperation
-                               (sequential (;(let $InducedHypothesis (TemporalImplicationInduction (get-state '&FIFO))
-                                            ;     (UpdateConcept $InducedHypothesis $t))
+                               (sequential ((let $InducedHypothesis (TemporalImplicationInduction (get-state '&FIFO))
+                                                 (UpdateConcept $InducedHypothesis $t))
                                             (ProcessBeliefEvent $InputEvent $t)
                                             (BeliefCycle $t)))
                                (UpdateReasonerState 'dummy)))))))
