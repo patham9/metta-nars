@@ -1,5 +1,5 @@
 ;params
-(= (AttentionalFocusConceptsMax) 10)
+(= (AttentionalFocusConceptsMax 'dummy) 10)
 
 ;spaces
 !(bind! '&concepts (new-space))
@@ -7,19 +7,6 @@
 
 ;priority of concepts
 (= (ConceptPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
-
-;whether evidence was just counted once
-;!(bind! '&tempstate (new-state False))
-;!(bind! '&tempset (new-space))
-;(= (StampDisjoint $x)
-;   (sequential (not (sequential ((do (change-state! '&tempstate False))
-;                     (do (case (get-atoms '&tempset)
-;                         (($y (remove-atom '&tempset $y)))))
-;                     (do (let $z (superpose $x)
-;                              (case (match '&tempset $z $z)
-;                                    (($w (change-state! '&tempstate True))
-;                                     (%void% (add-atom '&tempset $z))))))
-;                     (get-state '&tempstate))))))
 
 ;Whether evidence was just counted once
 (= (StampDisjoint $Ev1 $Ev2)
@@ -39,19 +26,19 @@
 ;update beliefs in existing concept with the new event or create new concept to enter the new evidence
 (= (UpdateConcept $NewEvent $t)
    (let* ((('Event ($Term $TV) ($Time $Evidence $EPrio)) $NewEvent)
-          ($NewEventEternalized (Eternalize (trace! $NewEvent $NewEvent))))
+          ($NewEventEternalized (Eternalize $NewEvent)))
         ; (sequential (;(display $NewEvent)
                       (case (match '&attentional_focus ('Concept $TermX $Belief $BeliefEvent $CPrio) 
                                                        (If (== $TermX $Term) ('Concept $TermX $Belief $BeliefEvent $CPrio)))
-                            ((('Concept $TermX $Belief $BeliefEvent $CPrio) (sequential ((display "CONCEPT MATCHED!")
+                            ((('Concept $TermX $Belief $BeliefEvent $CPrio) (sequential (;(display "CONCEPT MATCHED!")
                                                          (remove-atom '&attentional_focus ('Concept $TermX $Belief $BeliefEvent $CPrio))
-                                                         (display "REVISED111") (display $BeliefEvent)
+                                                         ;(display "REVISED111") (display $Belief) (display $NewEventEternalized)
                                                          (let* ((('Event $RevSentence $Metadata) (RevisionAndChoice $Belief $NewEventEternalized))
-                                                                ($RevisedBelief ('Event $RevSentence $Metadata))
+                                                                ($RevisedBelief ('Event (trace! ('@ $RevSentence) $RevSentence) $Metadata))
                                                                 ($MaxPrio (If (> (EventPriorityNow $EPrio $t) (ConceptPriorityNow $CPrio $t))
                                                                               $EPrio $CPrio)))
                                                          (sequential (
-                                                          (display "REVISED!!!!") 
+                                                          ;(display "REVISED!!!!") (display $RevisedBelief)
                                                           (add-atom '&attentional_focus ('Concept $Term $RevisedBelief $NewEvent $MaxPrio))))
                                                          ))
                                                          ))
@@ -78,10 +65,10 @@
 
 ;get eternal belief of concept
 (: EternalQuestion (-> Expression $t))
-(= (EternalQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $Term $Belief $BeliefEvent $CPrio) $Belief)
+(= (EternalQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $TermX $Belief $BeliefEvent $CPrio) (If (== $TermX $Term) $Belief))
                                  (($Ev $Ev) (%void% ('Event (None (0.5 0.0)) ('eternal () 0.0))))))
 
 ;get event belief of concept
 (: EventQuestion (-> Expression $t))
-(= (EventQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $Term $Belief $BeliefEvent $CPrio) $BeliefEvent)
+(= (EventQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $TermX $Belief $BeliefEvent $CPrio) (If (== $TermX $Term) $BeliefEvent))
                                (($Ev $Ev) (%void% ('Event (None (0.5 0.0)) (0 () 0.0))))))

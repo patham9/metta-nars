@@ -12,7 +12,7 @@
 ;Add subgoals to the PQ
 (= (DeriveSubgoals $Options)
    (do (let ('Decision $Op ('Event $S $Metadata)) (superpose $Options)
-            (let $Subgoal ('Event $S $Metadata) ;(trace! (! $S) $S)
+            (let $Subgoal ('Event (trace! ('! $S) $S) $Metadata)
                  (add-atom '&goal_events $Subgoal)))))
 
 ;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals
@@ -27,7 +27,7 @@
                                   ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase)))
                                  (If (StampDisjoint $SubgoalStamp)
                                      ('Decision (('^ $Op) $DVOp) ('Event ($Prec (Truth_StructuralDeduction $DVPrecOp))
-                                                                      ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec))))))))
+                                                                         ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec))))))))
         (let ('Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options OpExpectation $t)
              (If (> (Truth_Expectation $DVOp) 0.5)
                  (Execute $Opname)
@@ -37,12 +37,12 @@
 (= (GoalCycle $t) (sequential ((let $Ev (SelectHighestPriorityEvent '&goal_events $t)
                                     (sequential ((do (remove-atom '&goal_events $Ev))
                                                  (BestDecision $t $Ev (get-state '&FIFO)))))
-                               (do (UpdateReasonerState))
+                               (do (UpdateReasonerState 'dummy))
                                (do (BoundEvents '&goal_events 0.0 0.1 (GoalEventsMax 'dummy) $t)))))
 
 ;Input procedure
 (= (AddGoalEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState 'dummy))
-          ($InputEvent ('Event (trace! (! $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
+          ($InputEvent ('Event (trace! ('! $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
          (sequential ((do (add-atom '&goal_events $InputEvent))
                       (GoalCycle $t)))))

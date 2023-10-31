@@ -34,7 +34,7 @@
 ;Form a temporal implication between two events
 (= (TemporalImplication $Ev1 ('Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))
    (let ('Event ($Term1 $Truth1) ($Time1 $Evidence1 $EPrio1)) (Projection $Ev1 $Time2)
-        (trace! ('pt (($Term1 '=/> $Term2) (Truth_Induction $Truth1 $Truth2)))
+        (trace! (': (($Term1 '=/> $Term2) (Truth_Induction $Truth1 $Truth2)))
                 ('Event (($Term1 '=/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0))))))
 
 ;Whether an event's term is an operation
@@ -76,15 +76,13 @@
 ;Input procedure
 (= (AddBeliefEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState 'dummy))
-          ($InputEvent ('Event $Sentence ($t $evidentialBase ($t 1.0))))
+          ($InputEvent ('Event (trace! (': $Sentence) $Sentence) ($t $evidentialBase ($t 1.0))))
           ($notAnOperation (not (IsOp $InputEvent))))
-          (do (sequential ((display "AddBeliefEvent-")
-                           (EventToFIFO $InputEvent)
-                           ;(Anticipate (get-state '&FIFO) $t) TODO
+          (do (sequential ((EventToFIFO $InputEvent)
+                           ;(Anticipate (get-state '&FIFO) $t)
                            (If $notAnOperation
-                               (sequential ((display "NOTANOP!!!!")
-                                            ;(let $InducedHypothesis (TemporalImplicationInduction (get-state '&FIFO))
+                               (sequential (;(let $InducedHypothesis (TemporalImplicationInduction (get-state '&FIFO))
                                             ;     (UpdateConcept $InducedHypothesis $t))
                                             (ProcessBeliefEvent $InputEvent $t)
                                             (BeliefCycle $t)))
-                               (UpdateReasonerState)))))))
+                               (UpdateReasonerState 'dummy)))))))

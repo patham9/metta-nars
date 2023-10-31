@@ -9,8 +9,9 @@
 ;states
 !(bind! '&currentTime (new-state 1))
 !(bind! '&evidentialBase (new-state 1))
-(= (increment $atom) (change-state! $atom (+ 1 (get-state $atom))))
-(= (UpdateReasonerState) (trace! (time = (get-state '&currentTime)) ((increment '&currentTime) (increment '&evidentialBase))))
+(= (increment $atom) (sequential ((change-state! $atom (+ 1 (get-state $atom))))))
+(= (UpdateReasonerState 'dummy) ;(trace! (time = (get-state '&currentTime)) 
+   (sequential ((increment '&currentTime) (increment '&evidentialBase))))
 (= (GetReasonerState 'dummy) ((get-state '&currentTime) ((get-state '&evidentialBase))))
 
 ;priority of events
@@ -37,9 +38,7 @@
 ;a belief event to process, which demands adding it to the PQ and updating its concept
 (= (ProcessBeliefEvent $Ev $t)
    (sequential ((add-atom '&belief_events $Ev)
-                (display "added to PQ")
-                (UpdateConcept $Ev $t)
-                (display "updated concept to PQ"))))
+                (UpdateConcept $Ev $t))))
 
 ;bound the size of the attentional focus for tasks / events
 (= (BoundEvents $collection $Threshold $Increment $TargetAmount $t)
