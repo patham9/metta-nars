@@ -3,7 +3,7 @@
 ;use the event's evidence to induce a time-independent belief which can be used in the future
 (= (Eternalize $Ev) (let (Event ($Term $TV) ($Time $Evidence $EPrio)) $Ev
                          (If (== $Time eternal) $Ev
-                         (Event ($Term (Truth_Eternalize $TV)) (eternal $Evidence (0 0.0))))))
+                             (Event ($Term (Truth_Eternalize $TV)) (eternal $Evidence (0 0.0))))))
 
 ;use evidence of an event at a slightly different moment in time
 (= (Projection (Event ($Term ($f $c)) ($Time $Evidence $EPrio)) $TargetTime)
