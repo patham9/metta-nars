@@ -24,7 +24,7 @@
 ;Add event to FIFO
 (= (EventToFIFO $Ev)
    (let $newlist (EventWithFIFO3 $Ev (get-state '&FIFO))
-        (sequential (change-state! '&FIFO $newlist))))
+        (change-state! '&FIFO $newlist)))
 
 ;Form a sequence of two events
 (= (TemporalSequence $Ev1 ('Event ($Term2 $Truth2) ($Time2 $Evidence2 $EPrio2)))
