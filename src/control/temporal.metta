@@ -68,8 +68,7 @@
 (= (Anticipate ($Pos $Op $Pre) $t)
    (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
           ((Event ($OpTerm $OpTV) $OpMetadata) $Op)
-          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos)
-          ($Sequence ($Pre &/ Pos)))
+          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))
          (If (and (IsOp $Op) (not (IsOp $Pre)))
              (NegConfirmation ($PreTerm &/ $OpTerm) $PosTerm $t))))
 
