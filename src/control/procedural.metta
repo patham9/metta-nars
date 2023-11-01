@@ -27,7 +27,7 @@
                                   ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase)))
                                  (If (StampDisjoint $GoalEvBase $ImpEvBase)
                                      (Decision ((^ $Op) $DVOp) (Event ($Prec (Truth_StructuralDeduction $DVPrecOp))
-                                                                         ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec))))))))
+                                                                      ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec))))))))
         (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options OpExpectation $t)
              (If (> (Truth_Expectation $DVOp) 0.5)
                  (Execute $Opname)

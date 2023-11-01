@@ -1,15 +1,15 @@
 ;;Temporal inference (sequence and implication formation based on FIFO)
 
-;use the events evidence to induce a time-independent belief which can be used in the future
+;use the event's evidence to induce a time-independent belief which can be used in the future
 (= (Eternalize $Ev) (let (Event ($Term $TV) ($Time $Evidence $EPrio)) $Ev
                          (If (== $Time eternal) $Ev
-                             (Event ($Term (Truth_Eternalize $TV)) (eternal  $Evidence (0 0.0))))))
+                             (Event ($Term (Truth_Eternalize $TV)) (eternal $Evidence (0 0.0))))))
 
 ;use evidence of an event at a slightly different moment in time
 (= (Projection (Event ($Term ($f $c)) ($Time $Evidence $EPrio)) $TargetTime)
    (Event ($Term ($f (* $c (min 1 (/ 1 (abs (- $Time $TargetTime))))))) ($TargetTime $Evidence $EPrio)))
 
-;make the belief occurrence time compatible with the tasks
+;make the belief occurrence time compatible with the task's
 (= (TemporallyAlignedBelief $TaskTime $Belief) (If (== $TaskTime eternal)
                                                    (Eternalize $Belief)
                                                    (Projection $Belief $TaskTime)))
@@ -37,7 +37,7 @@
         (trace! (.. (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)))
                 (Event (($Term1 =/> $Term2) (Truth_Induction $Truth1 $Truth2)) ($Time2 (TupleConcat $Evidence1 $Evidence2) (0 0.0))))))
 
-;Whether an events term is an operation
+;Whether an event's term is an operation
 (= (IsOp (Event ($Term $Truth) $Metadata))
    (case $Term (((^ $Opname) True)
                 ($Otherwise False))))
@@ -59,7 +59,7 @@
         (If (not (== $ObservedCons $PredictedCons))
             (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t () (0 0.0))) $t))))
 
-;Check if the implications preconditions are met to anticipate the by the implication predicted outcome
+;Check if the implication's preconditions are met to anticipate the by the implication predicted outcome
 ;(= (Anticipate ($Pos $Pre $Trail) $t)
 ;   (let* (((Event ($PreTerm $PreTV) $PreMetadata) $Pre)
 ;          ((Event ($PosTerm $PosTV) $PosMetadata) $Pos))

@@ -9,10 +9,10 @@
         (If (StampDisjoint $ev1 $ev2)
             (let ($ConcTerm $ConcTV) (superpose ((|- $S1 $S2) (|- $S2 $S1)))
                  (Event ($ConcTerm $ConcTV)
-                         ($time1 $ConclusionStamp
-                                 ($t (ConclusionPriority (EventPriorityNow $prio1 $t)
-                                                         (ConceptPriorityNow $CPrio $t)
-                                                         $ConcTV))))))))
+                        ($time1 $ConclusionStamp
+                                ($t (ConclusionPriority (EventPriorityNow $prio1 $t)
+                                                        (ConceptPriorityNow $CPrio $t)
+                                                        $ConcTV))))))))
 
 ;find a belief for the task to generate conclusions with
 (= (ReasonWithTask (Event $S1 ($time1 $ev1 $prio1)) $t)
@@ -22,7 +22,7 @@
                                      ((Event $SE2 ($timeE2 $evE2 $prioE2)) $Cprio)
                                      ((Event $S2 ($time2 $ev2 $prio2)) $CPrio)))))
         (case (Conclude (Event $S1 ($time1 $ev1 $prio1)) (TemporallyAlignedBelief $time1 $Belief) $CPrio $t)
-              (((Event $1 $2) (sequential ((ProcessBeliefEvent (Event (trace! (.. $1) $1) $2) $t))))))))
+              (((Event $1 $2) (ProcessBeliefEvent (Event (trace! (.. $1) $1) $2) $t))))))
 
 ;select the highest priority belief event from the PQ and use it for reasoning
 (= (BeliefCycle $t) (do (sequential ((let $Ev (SelectHighestPriorityEvent &belief_events $t)
