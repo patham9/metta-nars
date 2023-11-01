@@ -53,11 +53,20 @@
                          (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t))))))
 
 ;get eternal belief of concept
-(: EternalQuestion (-> Expression $t))
-(= (EternalQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $TermX $Belief $BeliefEvent $CPrio) (If (== $TermX $Term) $Belief))
-                                 (($Ev $Ev) (%void% ('Event (None (0.5 0.0)) ('eternal () 0.0))))))
+(: EternalQuestion (-> Expression %Undefined%))
+(= (EternalQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $TermX $Belief $BeliefEvent $CPrio) (If (== $Term $TermX) $Belief))
+                                 (($Ev $Ev) (%void% ('Event ('None (0.5 0.0)) ('eternal () 0.0))))))
+
+(: HowAchieveQuestion (-> Expression %Undefined%))
+(= (HowAchieveQuestion $Cons) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept (($Prec '&/ ('^ $Op)) '=/> $ConsX) $Belief $BeliefEvent $CPrio) (If (== $Cons $ConsX) $Belief))
+                                    (($Ev $Ev) (%void% ('Event ('None (0.5 0.0)) ('eternal () 0.0))))))
+
+(: WhatWillHappenQuestion (-> Expression %Undefined%))
+(= (WhatWillHappenQuestion $Prec) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept ($PrecX '=/> $Cons) $Belief $BeliefEvent $CPrio) (If (== $Prec $PrecX) $Belief))
+                                    (($Ev $Ev) (%void% ('Event ('None (0.5 0.0)) ('eternal () 0.0))))))
+
 
 ;get event belief of concept
-(: EventQuestion (-> Expression $t))
+(: EventQuestion (-> Expression %Undefined%))
 (= (EventQuestion $Term) (case (match (superpose ('&attentional_focus '&concepts)) ('Concept $TermX $Belief $BeliefEvent $CPrio) (If (== $TermX $Term) $BeliefEvent))
-                               (($Ev $Ev) (%void% ('Event (None (0.5 0.0)) (0 () 0.0))))))
+                               (($Ev $Ev) (%void% ('Event ('None (0.5 0.0)) (0 () 0.0))))))

@@ -10,8 +10,7 @@
 !(bind! '&currentTime (new-state 1))
 !(bind! '&evidentialBase (new-state 1))
 (= (increment $atom) (sequential ((change-state! $atom (+ 1 (get-state $atom))))))
-(= (UpdateReasonerState 'dummy) ;(trace! (time = (get-state '&currentTime)) 
-   (sequential ((increment '&currentTime) (increment '&evidentialBase))))
+(= (UpdateReasonerState 'dummy) (sequential ((trace! ('time '= (get-state '&currentTime)) 42) (increment '&currentTime) (increment '&evidentialBase))))
 (= (GetReasonerState 'dummy) ((get-state '&currentTime) ((get-state '&evidentialBase))))
 
 ;priority of events
