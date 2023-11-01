@@ -10,14 +10,16 @@
 
 ;Whether evidence was just counted once
 (= (StampDisjoint $Ev1 $Ev2)
-   (== () (collapse (let* (($x (superpose $Ev1))
-                           ($y (superpose $Ev2)))
-                          (case (== $x $y) ((True 'overlap)))))))
+   (If (or (== $Ev1 ()) (== $Ev2 ())) ;check only needed due to a bug in the MeTTa interpreter
+       True                           ;https://github.com/trueagi-io/hyperon-experimental/issues/481
+       (== () (collapse (let* (($x (superpose $Ev1))
+                               ($y (superpose $Ev2)))
+                              (case (== $x $y) ((True 'overlap))))))))
 
 ;revise if there is no evidential overlap, else use higher-confident candidate
 (= (RevisionAndChoice ('Event ($Term1 ($f1 $c1)) ('eternal $ev1 $EPrio1)) ('Event ($Term2 ($f2 $c2)) ('eternal $ev2 $EPrio2)))
    (let $ConclusionStamp (TupleConcat $ev1 $ev2)
-        (If (StampDisjoint $ev1 $ev2) ;True ;(StampDisjoint $ConclusionStamp)
+        (If (StampDisjoint $ev1 $ev2)
             ('Event ($Term1 (Truth_Revision ($f1 $c1) ($f2 $c2))) ('eternal  $ConclusionStamp (0 0.0)))
             (If (> $c1 $c2)
                 ('Event ($Term1 ($f1 $c1)) ('eternal $ev1 (0 0.0)))
