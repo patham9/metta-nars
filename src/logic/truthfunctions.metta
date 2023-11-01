@@ -7,7 +7,7 @@
 (= (Truth_Exemplification ($f1 $c1) ($f2 $c2)) (1.0 (Truth_w2c (* (* $f1 $f2) (* $c1 $c2)))))
 (= (Truth_StructuralDeduction $T) (Truth_Deduction $T (1.0 0.9)))
 (= (Truth_Negation ($f $c)) ((- 1 $f) $c))
-(= (Truth StructuralDeductionNegated $T) (Truth_Negation (Truth_StructuralDeduction $T)))
+(= (Truth_StructuralDeductionNegated $T) (Truth_Negation (Truth_StructuralDeduction $T)))
 (= (Truth_Intersection ($f1 $c1) ($f2 $c2)) ((* $f1 $f2) (* $c1 $c2)))
 (= (Truth_StructuralIntersection $T) (Truth_Intersection $T (1.0 0.9)))
 (= (Truth_or $a $b) (- 1 (* (- 1 $a) (- 1 $b))))
