@@ -1,5 +1,5 @@
 ;params
-(= (AttentionalFocusConceptsMax dummy) 10)
+(= (AttentionalFocusConceptsMax) 10)
 
 ;spaces
 !(bind! &concepts (new-space))

@@ -1,4 +1,4 @@
-!(AddBeliefEvent ((((sheep --> ([ see ])) '&/ ('^ 'count)) '=/> (sheep --> ([ counted ]))) (1.0 0.9)))
+!(AddBeliefEvent ((((sheep --> ([ see ])) &/ (^ count)) =/> (sheep --> ([ counted ]))) (1.0 0.9)))
 !(BeliefCycle (get-state &currentTime))
 !(AddBeliefEvent ((sheep --> ([ white ])) (1.0 0.9)))
 
@@ -11,4 +11,4 @@
 !(EternalQuestion (sheep --> ([ see ])))
 ;[(Event ((sheep --> ([ see ])) (1.0 0.28712091374556914)) (eternal (5 4 3) (0 0.0)))]
 !(AddGoalEvent ((sheep --> ([ counted ])) (1.0 0.9)))
-;[('^ count)]
+;[(^ count)]
