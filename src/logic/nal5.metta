@@ -9,9 +9,9 @@
 (= (|- ($S $T1) (((neg $S) && $A) $T2)) ($A (Truth_DecomposeNNN $T1 $T2)))
 (= (|- ($S $T1) (((neg $S) || $A) $T2)) ($A (Truth_DecomposePPP $T1 $T2)))
 ;;!Syllogistic rules for Implication:
-(= (|- (($a ==> $b) $T1) (($b ==> $c) $T2)) (($a ==> $c) (Truth_Deduction $T1 $T2)))
-(= (|- (($a ==> $b) $T1) (($a ==> $c) $T2)) (($c ==> $b) (Truth_Induction $T1 $T2)))
-(= (|- (($a ==> $c) $T1) (($b ==> $c) $T2)) (($b ==> $a) (Truth_Abduction $T1 $T2)))
+(= (|- (($A ==> $B) $T1) (($B ==> $C) $T2)) (($A ==> $C) (Truth_Deduction $T1 $T2)))
+(= (|- (($A ==> $B) $T1) (($A ==> $C) $T2)) (($C ==> $B) (Truth_Induction $T1 $T2)))
+(= (|- (($A ==> $C) $T1) (($B ==> $C) $T2)) (($B ==> $A) (Truth_Abduction $T1 $T2)))
 (= (|- (($A ==> $B) $T1) (($B ==> $C) $T2)) (($C ==> $A) (Truth_Exemplification $T1 $T2)))
 ;;!Conditional composition for conjunction and disjunction:
 (= (|- (($A ==> $C) $T1) (($B ==> $C) $T2)) ((($A && $B) ==> $C) (Truth_Union $T1 $T2)))
