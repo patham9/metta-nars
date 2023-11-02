@@ -10,18 +10,18 @@
 !(bind! &currentTime (new-state 1))
 !(bind! &evidentialBase (new-state 1))
 (= (increment $atom) (change-state! $atom (+ 1 (get-state $atom))))
-(= (UpdateReasonerState) (trace! (time = (get-state &currentTime)) ((increment &currentTime) (increment &evidentialBase))))
+(= (UpdateReasonerState) (trace! (time := (get-state &currentTime)) ((increment &currentTime) (increment &evidentialBase))))
 (= (GetReasonerState) ((get-state &currentTime) ((get-state &evidentialBase))))
 
 ;priority of events
 (= (EventPriorityNow ($T $P) $t) (* $P (/ 1 (+ 1 (- $t $T)))))
 
 ;retrieve the best candidate (allows to use tuples / collapse results / spaces as a PQ)
-!(bind! &tempbest (new-state Nil))
+!(bind! &tempbest (new-state ()))
 !(bind! &tempbestscore (new-state 0))
 (= (BestCandidate $tuple $evaluateCandidateFunction $t)
    (sequential ((do (change-state! &tempbestscore 0))
-                (do (change-state! &tempbest Nil))
+                (do (change-state! &tempbest ()))
                 (do (let* (($x (superpose $tuple))
                                ($fx ($evaluateCandidateFunction $x $t)))
                               (superpose ((If (> $fx (get-state &tempbestscore))

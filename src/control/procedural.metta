@@ -12,7 +12,7 @@
 ;Add subgoals to the PQ
 (= (DeriveSubgoals $Options)
    (do (let (Decision $Op (Event $S $Metadata)) (superpose $Options)
-            (let $Subgoal (Event (trace! (! $S) $S) $Metadata)
+            (let $Subgoal (Event (trace! (!: $S) $S) $Metadata)
                  (add-atom &goal_events $Subgoal)))))
 
 ;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals
@@ -43,6 +43,6 @@
 ;Input procedure
 (= (AddGoalEvent $Sentence)
    (let* ((($t $evidentialBase) (GetReasonerState))
-          ($InputEvent (Event (trace! (! $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
+          ($InputEvent (Event (trace! (!: $Sentence) $Sentence) ($t $evidentialBase ($t 1.0)))))
          (sequential ((do (add-atom &goal_events $InputEvent))
                       (GoalCycle $t)))))

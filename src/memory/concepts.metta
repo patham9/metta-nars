@@ -59,11 +59,11 @@
                          (BoundAttention (+ $Threshold $Increment) $Increment $TargetAmount $t))))))
 
 ;get eternal belief of concept
-(: EternalQuestion (-> Expression $t))
+(: EternalQuestion (-> Expression %Undefined%))
 (= (EternalQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $Belief)
                                  (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (eternal Nil 0.0))))))
 
 ;get event belief of concept
-(: EventQuestion (-> Expression $t))
+(: EventQuestion (-> Expression %Undefined%))
 (= (EventQuestion $Term) (case (match (superpose (&attentional_focus &concepts)) (Concept $Term $Belief $BeliefEvent $CPrio) $BeliefEvent)
                                (($Ev $Ev) (%void% (Event (None (0.5 0.0)) (0 Nil 0.0))))))
