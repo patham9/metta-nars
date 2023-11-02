@@ -45,6 +45,6 @@
                             ((Event $Sentence ($Time $Evidence $EPrio)) $Ev))
                           (If (< (EventPriorityNow $EPrio $t) $Threshold)
                               (remove-atom $collection $Ev))))
-                (let $CurrentAmount (CollapseCardinality (get-atoms $collection))
+                (let $CurrentAmount (TupleCount (collapse (CountElement (get-atoms $collection))))
                      (If (> $CurrentAmount $TargetAmount)
                          (BoundEvents $collection (+ $Threshold $Increment) $Increment $TargetAmount $t))))))

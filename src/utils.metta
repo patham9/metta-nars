@@ -3,5 +3,3 @@
 (= (TupleCount $tuple) (If (== $tuple ()) 0 (+ 1 (TupleCount (cdr-atom $tuple)))))
 (: CountElement (-> Expression Number))
 (= (CountElement $x) (case $x (($y 1))))
-(: CollapseCardinality (-> Expression Number))
-(= (CollapseCardinality $expression) (TupleCount (collapse (CountElement $expression))))
