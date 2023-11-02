@@ -4,5 +4,3 @@
 !(AddBeliefEvent (((((ExtSet garfield) x (IntSet blue)) --> like) ==> ((ExtSet garfield) --> artist)) (1.0 0.9)))
 !(EternalQuestion ((ExtSet garfield) --> artist))
 ;[(Event (((ExtSet garfield) --> artist) (1.0 0.27508280575237937)) (eternal (4 3 2 1.0) (0 0.0)))]
-
-!(match &belief_events $1 $1)
