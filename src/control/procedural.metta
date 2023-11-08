@@ -16,7 +16,7 @@
                  (add-atom &goal_events $Subgoal)))))
 
 ;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals
-(= (BestDecision $t (Event ($Term $DV) ($GoalTime $GoalEvBase $GoalPrio)) $FIFO)
+(= (BestDecision $t (Event ($Term $DV) ($GoalTime $GoalEvBase $GoalPrio)))
    (let $Options (collapse (let* (((Event ((($Prec &/ (^ $Op)) =/> $Term) $ImpTV) ($ImpTime $ImpEvBase $ImpPrio))
                                    (EternalQuestion (($Prec &/ (^ $Op)) =/> $Term)))
                                   ($DVPrecOp (Truth_Deduction $DV $ImpTV))
@@ -24,10 +24,11 @@
                                    (Projection (EventQuestion $Prec) $t))
                                   ($DVOp (Truth_Deduction $PrecTV $DVPrecOp))
                                   ($DVPrec (Truth_StructuralDeduction $DVPrecOp))
-                                  ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase)))
+                                  ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase))
+                                  ($SubgoalPrio (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec)))
                                  (If (StampDisjoint $SubgoalStamp)
-                                     (Decision ((^ $Op) $DVOp) (Event ($Prec (Truth_StructuralDeduction $DVPrecOp))
-                                                                      ($t $SubgoalStamp ($t (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec))))))))
+                                     (Decision ((^ $Op) $DVOp) (Event ($Prec $DVPrec)
+                                                                      ($t $SubgoalStamp ($t $SubgoalPrio)))))))
         (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options OpExpectation $t)
              (If (> (Truth_Expectation $DVOp) 0.5)
                  (Execute $Opname)
@@ -36,7 +37,7 @@
 ;select the highest priority goal event from the PQ and use it for decision making
 (= (GoalCycle $t) (sequential ((let $Ev (SelectHighestPriorityEvent &goal_events $t)
                                     (sequential ((do (remove-atom &goal_events $Ev))
-                                                 (BestDecision $t $Ev (get-state &FIFO)))))
+                                                 (BestDecision $t $Ev))))
                                (do (UpdateReasonerState))
                                (do (BoundEvents &goal_events 0.0 0.1 (GoalEventsMax) $t)))))
 
