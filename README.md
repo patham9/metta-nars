@@ -39,14 +39,14 @@ This is very useful for developing, as it does not involve lengthy compilation a
 
 **Run interactive NARS shell with Scheme compiler or interpreter**
 
-To have an interactive shell to interact with NARS, the best way is to let MeTTamorph compile it to a binary and to then run that binary, which can be done with
+To have an interactive shell to interact with NARS, the best way is to let MeTTa-Morph compile it to a binary and to then run that binary, which can be done with
 ```
 cd metta-nars
 sh run_scheme_repl_compiled.sh
 ```
 This leads to a significantly faster system than interpreted, but can take minutes to compile on first invocation, next invocations will be fast since compiling the same code again is avoided. 
 
-Due to the slow compile time after code changes, for developers who work on MeTTa-NARS code iteratively, the recommended option hence is to run the system with the Scheme interpreter after letting MeTTamorph translate it to Scheme, which can be done with:
+Due to the slow compile time after code changes, for developers who work on MeTTa-NARS code iteratively, the recommended option hence is to run the system with the Scheme interpreter after letting MeTTa-Morph translate it to Scheme, which can be done with:
 ```
 cd metta-nars
 sh run_scheme_repl_interpreted.sh
