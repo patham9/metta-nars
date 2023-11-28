@@ -18,8 +18,8 @@
 !(AddBeliefEvent (ballhit (1.0 0.9)))
 
 ;just for looking at the hypotheses:
-!(EternalQuestion ((ballleft &/ (^ $Op)) =/> ballhit))
-!(EternalQuestion ((ballright &/ (^ $Op)) =/> ballhit))
+;!(EternalQuestion ((ballleft &/ (^ $Op)) =/> ballhit))
+;!(EternalQuestion ((ballright &/ (^ $Op)) =/> ballhit))
 
 !(AddBeliefEvent (ballleft (1.0 0.9)))
 !(AddGoalEvent (ballhit (1.0 0.9)))

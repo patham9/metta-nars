@@ -18,7 +18,7 @@
 ;execute the operation which most likely gets the goal achieved in current contexts, and if contexts are not yet fulfilled, derive them as subgoals
 (= (BestDecision $t (Event ($Term $DV) ($GoalTime $GoalEvBase $GoalPrio)))
    (let $Options (collapse (let* (((Event ((($Prec &/ (^ $Op)) =/> $Term) $ImpTV) ($ImpTime $ImpEvBase $ImpPrio))
-                                   (EternalQuestion (($Prec &/ (^ $Op)) =/> $Term)))
+                                   (HowAchieveQuestion $Term))
                                   ($DVPrecOp (Truth_Deduction $DV $ImpTV))
                                   ((Event ($PrecTerm $PrecTV) $PrecMetadata)
                                    (Projection (EventQuestion $Prec) $t))
@@ -26,7 +26,7 @@
                                   ($DVPrec (Truth_StructuralDeduction $DVPrecOp))
                                   ($SubgoalStamp (TupleConcat $GoalEvBase $ImpEvBase))
                                   ($SubgoalPrio (SubgoalPriority (EventPriorityNow $GoalPrio $t) $DVPrec)))
-                                 (If (StampDisjoint $SubgoalStamp)
+                                 (If (StampDisjoint $GoalEvBase $ImpEvBase)
                                      (Decision ((^ $Op) $DVOp) (Event ($Prec $DVPrec)
                                                                       ($t $SubgoalStamp ($t $SubgoalPrio)))))))
         (let (Decision ($Opname $DVOp) $Subgoal) (BestCandidate $Options OpExpectation $t)

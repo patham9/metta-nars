@@ -1,17 +1,17 @@
 ;;NAL term reductions
 ;;!Extensional intersection, union, conjunction reductions:
-(= ($A & $A) $A)
-(= ($A | $A) $A)
-(= ($A && $A) $A)
-(= ($A || $A) $A)
+(= (reduced ($A & $A)) $A)
+(= (reduced ($A | $A)) $A)
+(= (reduced ($A && $A)) $A)
+(= (reduced ($A || $A)) $A)
 ;;!Extensional set reductions:
-(= (({ $A }) | ({ $B })) ({ $A $B }))
-(= (({ $A $B }) | ({ $C })) ({ ($A . $B) $C }))
-(= (({ $C }) | ({ $A $B }) ) ({ $C ($A . $B) }))
+(= (reduced ((ExtSet $A) | (ExtSet $B))) (ExtSet $A $B))
+(= (reduced ((ExtSet $A $B) | (ExtSet $C))) (ExtSet ($A SetElement $B) $C))
+(= (reduced ((ExtSet $C) | (ExtSet $A $B) )) (ExtSet $C ($A SetElement $B)))
 ;;!Intensional set reductions:
-(= (([ $A ]) & ([ $B ])) ([ $A $B ]) )
-(= (([ $A $B ]) & ([ $C ])) ([ ($A . $B) $C ]))
-(= (([ $A ]) & ([ $B $C ])) ([ $A ($B . $C) ]))
+(= (reduced ((IntSet $A) & (IntSet $B))) (IntSet $A $B) )
+(= (reduced ((IntSet $A $B) & (IntSet $C))) (IntSet ($A SetElement $B) $C))
+(= (reduced ((IntSet $A) & (IntSet $B $C))) (IntSet $A ($B SetElement $C)))
 ;;!Reduction for set element copula:
-(= ({ ( $A . $B ) }) ({ $A $B }))
-(= ([ ( $A . $B ) ]) ([ $A $B ]))
+(= (reduced (ExtSet ( $A SetElement $B ))) (ExtSet $A $B))
+(= (reduced (IntSet ( $A SetElement $B ))) (IntSet $A $B))

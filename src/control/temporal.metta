@@ -55,7 +55,7 @@
 
 ;Add negative evidence for implications which predicted the input unsuccessfully
 (= (NegConfirmation $PrecTerm $ObservedCons $t)
-   (let (Event (($PrecTerm =/> $PredictedCons) $ImpTV) $ImpMetadata) (EternalQuestion ($PrecTerm =/> $PredictedCons))
+   (let (Event (($PrecTerm =/> $PredictedCons) $ImpTV) $ImpMetadata) (WhatWillHappenQuestion $PrecTerm)
         (If (not (== $ObservedCons $PredictedCons))
             (UpdateConcept (Event (($PrecTerm =/> $PredictedCons) (0.0 0.1)) ($t () (0 0.0))) $t))))
 

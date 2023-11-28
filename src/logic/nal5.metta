@@ -1,13 +1,13 @@
 ;;NAL-5
 ;;!Negation conjunction and disjunction decomposition:
-(= (|- ((! $A) $T)) ($A (Truth_Negation $T)))
+(= (|- ((neg $A) $T)) ($A (Truth_Negation $T)))
 (= (|- (($A && $B) $T)) ($A (Truth_StructuralDeduction $T)))
 (= (|- (($A && $B) $T)) ($B (Truth_StructuralDeduction $T)))
 (= (|- (($A && $B) $T)) (($B && $A) (Truth_StructuralIntersection $T)))
 (= (|- ($S $T1) (($S && $A) $T2)) ($A (Truth_DecomposePNN $T1 $T2)))
 (= (|- ($S $T1) (($S || $A) $T2)) ($A (Truth_DecomposeNPP $T1 $T2)))
-(= (|- ($S $T1) (((! $S) && $A) $T2)) ($A (Truth_DecomposeNNN $T1 $T2)))
-(= (|- ($S $T1) (((! $S) || $A) $T2)) ($A (Truth_DecomposePPP $T1 $T2)))
+(= (|- ($S $T1) (((neg $S) && $A) $T2)) ($A (Truth_DecomposeNNN $T1 $T2)))
+(= (|- ($S $T1) (((neg $S) || $A) $T2)) ($A (Truth_DecomposePPP $T1 $T2)))
 ;;!Syllogistic rules for Implication:
 (= (|- (($A ==> $B) $T1) (($B ==> $C) $T2)) (($A ==> $C) (Truth_Deduction $T1 $T2)))
 (= (|- (($A ==> $B) $T1) (($A ==> $C) $T2)) (($C ==> $B) (Truth_Induction $T1 $T2)))

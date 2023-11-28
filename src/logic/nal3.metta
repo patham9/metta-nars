@@ -1,9 +1,9 @@
 ;;NAL-3
 ;;!Set decomposition:
-(= (|- ((({ $A $B }) --> $M) $T)) ((({ $A }) --> $M) (Truth_StructuralDeduction $T)))
-(= (|- ((({ $A $B }) --> $M) $T)) ((({ $B }) --> $M) (Truth_StructuralDeduction $T)))
-(= (|- ((M --> ([ $A $B ])) $T)) ((M --> ([ $A ])) (Truth_StructuralDeduction $T)))
-(= (|- ((M --> ([ $A $B ])) $T)) ((M --> ([ $B ])) (Truth_StructuralDeduction $T)))
+(= (|- (((ExtSet $A $B) --> $M) $T)) (((ExtSet $A) --> $M) (Truth_StructuralDeduction $T)))
+(= (|- (((ExtSet $A $B) --> $M) $T)) (((ExtSet $B) --> $M) (Truth_StructuralDeduction $T)))
+(= (|- ((M --> (IntSet $A $B)) $T)) ((M --> (IntSet $A)) (Truth_StructuralDeduction $T)))
+(= (|- ((M --> (IntSet $A $B)) $T)) ((M --> (IntSet $B)) (Truth_StructuralDeduction $T)))
 ;;!Extensional and intensional intersection decomposition:
 (= (|- ((($S | $P) --> $M) $T)) (($S --> $M) (Truth_StructuralDeduction $T)))
 (= (|- (($M --> ($S & $P)) $T)) (($M --> $S) (Truth_StructuralDeduction $T)))

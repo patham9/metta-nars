@@ -9,8 +9,8 @@
 ;states
 !(bind! &currentTime (new-state 1))
 !(bind! &evidentialBase (new-state 1))
-(= (increment $atom) (change-state! $atom (+ 1 (get-state $atom))))
-(= (UpdateReasonerState) (trace! (time := (get-state &currentTime)) ((increment &currentTime) (increment &evidentialBase))))
+(= (increment $atom) (sequential ((change-state! $atom (+ 1 (get-state $atom))))))
+(= (UpdateReasonerState) (sequential ((trace! (time := (get-state &currentTime)) 42) (increment &currentTime) (increment &evidentialBase))))
 (= (GetReasonerState) ((get-state &currentTime) ((get-state &evidentialBase))))
 
 ;priority of events
@@ -45,6 +45,6 @@
                             ((Event $Sentence ($Time $Evidence $EPrio)) $Ev))
                           (If (< (EventPriorityNow $EPrio $t) $Threshold)
                               (remove-atom $collection $Ev))))
-                (let $CurrentAmount (CollapseCardinality (get-atoms $collection))
+                (let $CurrentAmount (TupleCount (collapse (CountElement (get-atoms $collection))))
                      (If (> $CurrentAmount $TargetAmount)
                          (BoundEvents $collection (+ $Threshold $Increment) $Increment $TargetAmount $t))))))
