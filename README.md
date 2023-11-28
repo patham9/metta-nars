@@ -57,5 +57,4 @@ The input these repls allow is to call a function with arguments, such as to sen
 **Run with the MeTTa interpreter**
 
 As indicated by the MeTTa version of the above scripts (run_metta.sh and run_metta_repl.sh), it is also still possible to run MeTTa-NARS with the MeTTa interpreter. However this is slow and thus, except for the purpose of checking for potential MeTTa compatibility issues between the MeTTa interpreter and MeTTa-morph, not recommended. The last version of MeTTa-NARS which was trimmed down to be reasonably fast with the MeTTa interpreter can be found in the before-metta-morph branch:
-
 https://github.com/patham9/metta-nars/tree/before-metta-morph
