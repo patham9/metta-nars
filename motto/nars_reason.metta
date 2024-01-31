@@ -11,10 +11,12 @@
 ; to put parsed statements into MeTTa-NARS
 !(match &self (Sentence $sentence)
    (let $belief (llm (Agent ./../nars_reason.msa) (user $sentence))
-        (superpose ((trace! $belief (nop 42))
+        (superpose ((trace! $belief $belief)
                     (let (AddBeliefEvent ($term $tv)) $belief ;AddBeliefEvent call for MeTTa-NARS
                          (add-atom &self (encoded ($sentence INPUT_TERM: $term)))))))) ;Keep track of what sentence was encoded as which term
 
 ; And we can transform natural language questions into question evaluations based on previous statements:
-!(let (EternalQuestion ($question $tv)) (llm (Agent ./../nars_reason.msa) (system "Question") (user ("Is Sam a cat?" (collapse (match &self (encoded $1) $1)))))
-      (trace! (EternalQuestion $question) (nop 42)))
+!(let (EternalQuestion ($question $tv)) (llm (Agent ./../nars_reason.msa)
+      (system "Question")
+      (user ("Is Sam a cat?" (collapse (match &self (encoded $1) $1)))))
+      (trace! (EternalQuestion $question) (EternalQuestion $question)))
