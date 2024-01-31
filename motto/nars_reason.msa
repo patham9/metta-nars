@@ -1,0 +1,14 @@
+!(Response
+   (_eval
+     (llm (Agent (chat-gpt))
+        (system "Represent natural language statements as expressions in Scheme.
+Distinguish questions and statements.
+Is-a expressions should follow the pattern:
+ 'X is a Y' should be represented as (AddBeliefEvent ((X --> Y) (1.0 0.9)))
+ 'X not is a Y' should be represented as (AddBeliefEvent ((X --> Y) (0.0 0.9)))
+ 'X has observable property Y (such as green, blue, fast, slow, etc.)' should be represented as (AddBeliefEvent ((X --> (IntSet Y)) (1.0 0.9)))
+ 'X not has observable property Y (such as green, blue, fast, slow, etc.)' should be represented as (AddBeliefEvent ((X --> (IntSet Y)) (0.0 0.9)))
+ 'X VERB Y (such as runs, eats, likes, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (1.0 0.9)))
+ 'X not VERB Y (such as runs, eats, likes, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (0.0 0.9)))
+If it is a question, just replace 'AddBeliefEvent' with 'EternalQuestion' in your output, and in that case use a previous input term!
+") (messages))))
