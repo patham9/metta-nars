@@ -1,3 +1,5 @@
+!(extend-py! metta-morph)
+!(compile! NARS.metta)
 !(extend-py! motto)
 
 ; This is a PoC example of MeTTa-motto-MeTTa-NARS interoperability
