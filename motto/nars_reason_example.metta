@@ -6,7 +6,7 @@
 
 ; Here, we have a set of statements in natural language
 (Sentence "sam is a cat")
-(Sentence "sam likes fish")
+(Sentence "sam likes the fish")
 (Sentence "fish are animals")
 
 ; And we process them with the use of ChatGPT-based MeTTa-agent
@@ -20,5 +20,5 @@
 ; And we can transform natural language questions into question evaluations based on previous statements:
 !(let (AddQuestion ($question $tv)) (llm (Agent nars_reason.msa)
       (system "Question")
-      (user ("sam is a cat?" (collapse (match &self (encoded $1) $1)))))
+      (user ("a cat likes the fish?" (collapse (match &self (encoded $1) $1)))))
       (trace! (Question ($question $tv)) (EternalQuestion $question)))
