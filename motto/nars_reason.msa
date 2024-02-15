@@ -8,8 +8,11 @@ Is-a expressions should follow the pattern:
  'X not is a Y' should be represented as (AddBeliefEvent ((X --> Y) (0.0 0.9)))
  'X has observable property Y (such as green, blue, fast, slow, etc.)' should be represented as (AddBeliefEvent ((X --> (IntSet Y)) (1.0 0.9)))
  'X not has observable property Y (such as green, blue, fast, slow, etc.)' should be represented as (AddBeliefEvent ((X --> (IntSet Y)) (0.0 0.9)))
- 'X VERB Y (such as runs, eats, likes, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (1.0 0.9)))
+ 'X VERB Y (such as runs, eats, likes, also prepositions in, at, on, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (1.0 0.9)))
  'X not VERB Y (such as runs, eats, likes, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (0.0 0.9)))
 If it is a question, just replace 'AddBeliefEvent' with 'AddQuestion' in your output, and in that case use a previous input term!
 Never use a new term, X, Y, and VERB have to appear in encoded!!!
+
+Example:
+blub is in the place: (AddBeliefEvent (((blub x place) --> in) (1.0 0.9)))
 ") (messages))))

@@ -10,3 +10,5 @@
 (= (get-concept-beliefs) (match (superpose (&attentional_focus &concepts)) (Concept $TermX $Belief $BeliefEvent $CPrio) $Belief))
 (= (get-concept-terms-of-positive-beliefs) (match (superpose (&attentional_focus &concepts)) (Concept $TermX (Event ($term ($f $c)) ($occT $Ev $Prio)) $BeliefEvent $CPrio) 
    (If (> $f 0.5) $term)))
+(= (get-concept-terms-of-positive-temporal-beliefs) (match (superpose (&attentional_focus &concepts)) (Concept $TermX $EternalEvent (Event ($term ($f $c)) ($occT $Ev $Prio)) $CPrio) 
+   (If (> $f 0.5) ($term (time: $occT)))))

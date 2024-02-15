@@ -10,4 +10,5 @@ cp ./../nars_reason_repl.metta ../../../extend/nars_reason_repl.metta
 cp ./../nars_reason.msa ../../../extend/nars_reason.msa
 echo "ALREADY_COMPILED" > ../ALREADY_COMPILED
 cd ../../../extend/
-python3 ./../repl/run_metta_repl.py file=nars_reason_repl.metta suggestion1='!(Sentence "sam is a cat")' suggestion2='!(Question "sam is a cat?")'
+export PYTHONPATH=/Users/patham9/hyperon-experimental/python
+/opt/homebrew/Frameworks/Python.framework/Versions/3.12/bin/python3.12 ./../repl/run_metta_repl.py file=nars_reason_repl.metta suggestion1='!(Sentence "sam is a cat")' suggestion2='!(Question "sam is a cat?")'

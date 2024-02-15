@@ -15,5 +15,5 @@
 (= (Question $sentence)
    (let $res (llm (Agent nars_query.msa)
       (system "Question")
-      (user (($sentence "? answer in full sentence in parenthesis?") (collapse (memory: (get-concept-terms-of-positive-beliefs))))))
+      (user (($sentence "? answer in full sentence in parenthesis using newest information?") (collapse (memory: (get-concept-terms-of-positive-temporal-beliefs))))))
       (trace! (fromLLM $res) $res)))
