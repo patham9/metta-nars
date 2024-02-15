@@ -16,7 +16,6 @@
         (let (AddBeliefEvent ($term $tv)) $belief ;AddBeliefEvent call for MeTTa-NARS
              (superpose ((add-atom &self (encoded (index (get-state &idx) $term)))))))) ;Keep track of encoded terms
 
-;(AddQuestion ($question $tv))  (EternalQuestion $question)
 ; And we can transform natural language questions into question evaluations based on previous statements:
 !(let $res (llm (Agent nars_query.msa)
       (system "Question")
