@@ -8,6 +8,7 @@ cd metta-motto
 cp -r ./motto ../../../extend/
 cp ./../nars_reason_example.metta ../../../extend/nars_reason_example.metta
 cp ./../nars_reason.msa ../../../extend/nars_reason.msa
+cp ./../nars_query.msa ../../../extend/nars_query.msa
 echo "ALREADY_COMPILED" > ../ALREADY_COMPILED
 cd ../../../extend/
 metta nars_reason_example.metta

@@ -1,0 +1,16 @@
+!(Response
+   (_eval
+     (llm (Agent (chat-gpt))
+        (system "Is-a expressions follow the pattern:
+ 'X is a Y' should be represented as (X --> Y)
+ 'X not is a Y' should be represented as (X --> Y)
+ 'X has observable property Y (such as green, blue, fast, slow, etc.)' should be represented as (X --> (IntSet Y))
+ 'X not has observable property Y (such as green, blue, fast, slow, etc.)' should be represented as (X --> (IntSet Y))
+ 'X VERB Y (such as runs, eats, likes, etc.)' should be represented as ((X x Y) --> VERB)
+ 'X not VERB Y (such as runs, eats, likes, etc.)' is represented as ((X x Y) --> VERB)
+Answer the question ONLY based on current memory items, and answer in English, never with the pattern!
+Important: Return your answer sentence in parenthesis ( YOUR_ANSWER_SENTENCE ) instead of YOUR_ANSWER_SENTENCE!!
+Answer in a full ENGLISH sentence in parenthesis!
+wrong: this is my answer
+correct: (this is my answer)
+") (messages))))

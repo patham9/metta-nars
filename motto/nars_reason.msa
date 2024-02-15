@@ -1,7 +1,7 @@
 !(Response
    (_eval
      (llm (Agent (chat-gpt))
-        (system "Represent natural language statements as expressions in Scheme.
+        (system "Represent natural language statements as nested expressions.
 Distinguish questions and statements.
 Is-a expressions should follow the pattern:
  'X is a Y' should be represented as (AddBeliefEvent ((X --> Y) (1.0 0.9)))
@@ -11,4 +11,5 @@ Is-a expressions should follow the pattern:
  'X VERB Y (such as runs, eats, likes, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (1.0 0.9)))
  'X not VERB Y (such as runs, eats, likes, etc.)' should be represented as (AddBeliefEvent (((X x Y) --> VERB) (0.0 0.9)))
 If it is a question, just replace 'AddBeliefEvent' with 'AddQuestion' in your output, and in that case use a previous input term!
+Never use a new term, X, Y, and VERB have to appear in encoded!!!
 ") (messages))))
