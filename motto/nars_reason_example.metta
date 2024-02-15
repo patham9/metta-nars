@@ -9,6 +9,10 @@
 (Sentence "sam likes the fish")
 (Sentence "fish are animals")
 
+; TODO filter based on belief occurrence time (newer last) and embedding similarity with question
+(= (filter $question $beliefs)
+   $beliefs)
+
 ; And we process them with the use of ChatGPT-based MeTTa-agent
 ; to put parsed statements into MeTTa-NARS
 !(match &self (Sentence $sentence)
@@ -17,7 +21,8 @@
              (superpose ((add-atom &self (encoded $term))))))) ;Keep track of encoded terms
 
 ; And we can transform natural language questions into question evaluations based on previous statements:
-!(let $res (llm (Agent nars_query.msa)
+!(let $question "sam likes animals?"
+      (let $res (llm (Agent nars_query.msa)
       (system "Question")
-      (user ("sam likes animals?" (collapse (memory: (get-concept-terms-of-positive-temporal-beliefs))))))
-      (trace! (fromLLM $res) $res))
+      (user ($question (collapse (memory: (filter $question (get-concept-terms-of-positive-temporal-beliefs)))))))
+      (trace! (fromLLM $res) $res)))
