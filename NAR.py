@@ -27,23 +27,44 @@ def trackTime(outp):
     return outp
 
 def NAR_Cycle(cycles):
+    Ms = {"inputs": [], "derivations": [], "answers": [], "executions": []}
     for i in range(cycles):
-        NAR_AddInput(f'!(BeliefCycle {currentTime})')
+        M = NAR_AddInput(f'!(BeliefCycle {currentTime})')
+        Ms["inputs"] += M["inputs"]
+        Ms["derivations"] += M["derivations"]
+        Ms["answers"] += M["answers"]
+        Ms["executions"] += M["executions"]
     for i in range(cycles):
-        NAR_AddInput(f'!(GoalCycle {currentTime})')
+        M = NAR_AddInput(f'!(GoalCycle {currentTime})')
+        Ms["inputs"] += M["inputs"]
+        Ms["derivations"] += M["derivations"]
+        Ms["answers"] += M["answers"]
+        Ms["executions"] += M["executions"]
+    return Ms
 
 def NAR_AddInput(metta):
+    M = {"inputs": [], "derivations": [], "answers": [], "executions": []}
     usedNAR.stdin.write(metta+'\n')
     usedNAR.stdin.flush()
-    print(GREEN + trackTime(usedNAR.stdout.readline()).replace("metta> metta> [", MAGENTA + "ANS: ").replace("metta> metta>", "IN: ") + RESET, end="")
+    ret = trackTime(usedNAR.stdout.readline())
+    if "metta> metta> [" in ret:
+        M["answers"].append(ret)
+        ret = MAGENTA + ret.replace("metta> metta> [", "ANS: ")
+    elif "metta> metta>" in ret:
+        M["inputs"].append(ret)
+        ret = GREEN + ret.replace("metta> metta>", "IN: ")
+    print(ret + RESET, end="")
     usedNAR.stdin.write('!(+ 41 1)\n') #just for synch
     while True:
         usedNAR.stdin.flush()
         LINE = trackTime(usedNAR.stdout.readline())
         if LINE.startswith("[(^ "):
+            M["executions"].append(LINE)
             print(RED + "EXE:", LINE + RESET, end="")
         elif "unspecified" not in LINE and not LINE.startswith("[]") and not LINE.startswith("metta> metta> [42]"):
+            M["derivations"].append(LINE)
             print(YELLOW + "OUT:", LINE + RESET, end="")
         if "metta> metta> [42]" in LINE:
             usedNAR.stdout.readline()
             break
+    return M
