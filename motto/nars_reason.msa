@@ -1,6 +1,6 @@
 !(Response
    (_eval
-     (llm (Agent (chat-gpt))
+     (llm (Agent (chat-gpt "gpt-4"))
         (system "Represent natural language statements as nested expressions.
 Distinguish questions and statements.
 Is-a expressions should follow the pattern:
