@@ -27,31 +27,31 @@ def trackTime(outp):
     return outp
 
 def NAR_Cycle(cycles):
-    Ms = {"inputs": [], "derivations": [], "answers": [], "executions": []}
+    Ms = {"input": [], "derivations": [], "answers": [], "executions": []}
     for i in range(cycles):
         M = NAR_AddInput(f'!(BeliefCycle {currentTime})')
-        Ms["inputs"] += M["inputs"]
+        Ms["input"] += M["input"]
         Ms["derivations"] += M["derivations"]
         Ms["answers"] += M["answers"]
         Ms["executions"] += M["executions"]
     for i in range(cycles):
         M = NAR_AddInput(f'!(GoalCycle {currentTime})')
-        Ms["inputs"] += M["inputs"]
+        Ms["input"] += M["input"]
         Ms["derivations"] += M["derivations"]
         Ms["answers"] += M["answers"]
         Ms["executions"] += M["executions"]
     return Ms
 
 def NAR_AddInput(metta):
-    M = {"inputs": [], "derivations": [], "answers": [], "executions": []}
+    M = {"input": [], "derivations": [], "answers": [], "executions": []}
     usedNAR.stdin.write(metta+'\n')
     usedNAR.stdin.flush()
     ret = trackTime(usedNAR.stdout.readline())
     if "metta> metta> [" in ret:
-        M["answers"].append(ret)
+        M["answers"].append({"metta": ret})
         ret = MAGENTA + ret.replace("metta> metta> [", "ANS: ")
     elif "metta> metta>" in ret:
-        M["inputs"].append(ret)
+        M["input"].append({"metta": ret})
         ret = GREEN + ret.replace("metta> metta>", "IN: ")
     print(ret + RESET, end="")
     usedNAR.stdin.write('!(+ 41 1)\n') #just for synch
@@ -59,10 +59,11 @@ def NAR_AddInput(metta):
         usedNAR.stdin.flush()
         LINE = trackTime(usedNAR.stdout.readline())
         if LINE.startswith("[(^ "):
-            M["executions"].append(LINE)
+            execdict = {'operator': '^'+LINE.split("[(^ ")[1].split(")")[0], 'arguments': [], 'metta': LINE}
+            M["executions"].append(execdict)
             print(RED + "EXE:", LINE + RESET, end="")
         elif "unspecified" not in LINE and not LINE.startswith("[]") and not LINE.startswith("metta> metta> [42]"):
-            M["derivations"].append(LINE)
+            M["derivations"].append({"metta": LINE})
             print(YELLOW + "OUT:", LINE + RESET, end="")
         if "metta> metta> [42]" in LINE:
             usedNAR.stdout.readline()
