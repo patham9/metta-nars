@@ -1,3 +1,4 @@
+#export OPENAI_API_KEY=...
 echo "Welcome to MeTTa-Motto + MeTTa-NARS + MeTTa-Morph, please make sure to export OPENAI_API_KEY=..."
 cd ..
 sh build.sh
@@ -12,3 +13,4 @@ cp ./../nars_query.msa ../../../extend/nars_query.msa
 echo "ALREADY_COMPILED" > ../ALREADY_COMPILED
 cd ../../../extend/
 metta nars_reason_example.metta
+ss

@@ -1,3 +1,4 @@
+#export OPENAI_API_KEY=...
 echo "Welcome to MeTTa-Motto + MeTTa-NARS + MeTTa-Morph, please make sure to export OPENAI_API_KEY=..."
 cd ..
 sh build.sh

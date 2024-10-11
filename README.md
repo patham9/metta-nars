@@ -33,7 +33,7 @@ git clone https://github.com/patham9/metta-nars
 **Run a reasoning example with the Scheme interpreter**
 ```
 cd metta-nars
-sh run_scheme.sh ./tests/testX.metta
+sh run_scheme.sh ./tests/test<X>.metta
 ```
 This is very useful for developing, as it does not involve lengthy compilation and allows to automatically input information into NARS according to the contens of the MeTTa file.
 

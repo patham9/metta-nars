@@ -1,6 +1,6 @@
 !(Response
    (_eval
-     (llm (Agent (chat-gpt))
+     (llm (Agent (chat-gpt "gpt-4"))
         (system "Is-a expressions follow the pattern:
  'X is a Y' should be represented as (X --> Y)
  'X not is a Y' should be represented as (X --> Y)
