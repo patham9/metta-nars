@@ -65,7 +65,7 @@ def NAR_AddInput(metta):
         elif "unspecified" not in LINE and not LINE.startswith("[]") and not "metta> [42]" in LINE:
             M["derivations"].append({"metta": LINE})
             print(YELLOW + "OUT:", LINE + RESET, end="")
-        if "metta> [42]" in LINE in LINE:
+        if "metta> [42]" in LINE:
             usedNAR.stdout.readline()
             break
     return M
