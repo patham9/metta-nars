@@ -50,7 +50,7 @@ def NAR_AddInput(metta):
     if "metta> metta> [" in ret:
         M["answers"].append({"metta": ret})
         ret = MAGENTA + ret.replace("metta> metta> [", "ANS: ")
-    elif "metta> metta>" in ret:
+    elif "metta> metta>" in ret and not "time :=" in ret:
         M["input"].append({"metta": ret})
         ret = GREEN + ret.replace("metta> metta>", "IN: ")
     print(ret + RESET, end="")
