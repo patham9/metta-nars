@@ -62,10 +62,10 @@ def NAR_AddInput(metta):
             execdict = {'operator': '^'+LINE.split("[(^ ")[1].split(")")[0], 'arguments': [], 'metta': LINE}
             M["executions"].append(execdict)
             print(RED + "EXE:", LINE + RESET, end="")
-        elif "unspecified" not in LINE and not LINE.startswith("[]") and not LINE.startswith("metta> metta> [42]"):
+        elif "unspecified" not in LINE and not LINE.startswith("[]") and not "metta> [42]" in LINE:
             M["derivations"].append({"metta": LINE})
             print(YELLOW + "OUT:", LINE + RESET, end="")
-        if "metta> metta> [42]" in LINE:
+        if "metta> [42]" in LINE in LINE:
             usedNAR.stdout.readline()
             break
     return M
